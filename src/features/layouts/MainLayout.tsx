@@ -3,9 +3,9 @@ import Navbar, { Footer } from '../../components/Bars';
 
 function MainLayout({ children }: PropsWithChildren) {
     return (
-        <div className="flex flex-col items-center w-full">
+        <div className="flex flex-col items-center">
             <Navbar />
-            <main className="h-screen w-full">{children}</main>
+            <main className="w-full">{children}</main>
             <Footer />
         </div>
     );

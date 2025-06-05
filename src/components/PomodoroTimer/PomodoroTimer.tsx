@@ -85,7 +85,7 @@ function PomodoroTimer() {
     }, []);
 
     return (
-        <div className="flex flex-col border rounded-xl p-4 gap-4">
+        <div className="flex flex-col  rounded-xl p-4 gap-4">
             <progress
                 className="progress"
                 value={timerState.remainingSeconds}

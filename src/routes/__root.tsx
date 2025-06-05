@@ -21,7 +21,9 @@ export const Route = createRootRoute({
 function RootComponent() {
     return (
         <MainLayout>
-            <Outlet />
+            <div className="px-3">
+                <Outlet />
+            </div>
             <Toaster position="bottom-right" toastOptions={{ duration: TOAST_DURATION }} />
             <TanStackRouterDevtools position="bottom-right" />
         </MainLayout>

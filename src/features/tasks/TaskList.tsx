@@ -1,8 +1,7 @@
 function TaskList() {
     return (
-        <div>
+        <div className="border rounded-xl p-4 ">
             <h1>Task List</h1>
-            {/* Task list content goes here */}
         </div>
     );
 }

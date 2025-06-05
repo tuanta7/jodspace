@@ -3,7 +3,7 @@ export const THEMES = {
     LIGHT: 'winter',
 };
 
-export const TOAST_DURATION = 3000000;
+export const TOAST_DURATION = 3000;
 
 export const OAUTH = {
     CODE_VERIFIER_LENGTH: 80,
@@ -22,6 +22,9 @@ export const OAUTH = {
         RESPONSE_TYPE: 'code', // authorization code flow
         REDIRECT_URI: 'http://localhost:5173/callback/google',
         CLIENT_ID: '1013864550314-fd16i9tgvi9rkl8n8gc093pbblqa4re2.apps.googleusercontent.com',
+    },
+    GITHUB: {
+        REDIRECT_URI: 'http://localhost:5173/callback/github',
     },
 };
 

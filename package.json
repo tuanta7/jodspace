@@ -11,13 +11,19 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@monaco-editor/react": "^4.7.0",
     "@tanstack/react-query": "^5.64.1",
     "@tanstack/react-router": "^1.119.0",
     "@tanstack/react-router-devtools": "^1.119.1",
     "axios": "^1.7.9",
+    "github-markdown-css": "^5.8.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.54.2",
+    "react-markdown": "^10.1.0",
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0",
     "sonner": "^2.0.4"
   },
   "devDependencies": {
