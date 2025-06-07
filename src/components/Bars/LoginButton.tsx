@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Button from '../Button/Button.tsx';
+import Button from '../Button.tsx';
 
 import { OAUTH } from '../../utils/constants.ts';
 import { apiClient } from '../../services/apiClient.ts';
@@ -52,10 +52,10 @@ function LoginButton() {
                     ></path>
                 </svg>
             }
-            className="btn btn-secondary btn-sm"
+            className="btn btn-sm btn-primary btn-outline"
             onClick={(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => handleRedirect(e)}
         >
-            Login
+            <span className="mx-2">Login</span>
         </Button>
     );
 }

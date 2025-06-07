@@ -1,6 +1,6 @@
 import ThemeController from './ThemeController.tsx';
 import { Bars3Icon } from '@heroicons/react/24/outline';
-import Button from '../Button/index.ts';
+import Button from '../Button.tsx';
 import { UserIcon } from '@heroicons/react/24/outline';
 import LoginButton from './LoginButton.tsx';
 
@@ -8,7 +8,7 @@ function Navbar() {
     const isLoggedIn = false;
 
     return (
-        <div className="navbar px-3 flex justify-between items-center">
+        <div className="navbar p-3 flex justify-between items-center">
             <div className="navbar-start">
                 <Button className="btn btn-sm btn-ghost">
                     <Bars3Icon className="w-6" />

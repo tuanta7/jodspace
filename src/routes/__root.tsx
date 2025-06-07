@@ -21,7 +21,7 @@ export const Route = createRootRoute({
 function RootComponent() {
     return (
         <MainLayout>
-            <div className="px-3">
+            <div className="py-3 px-6">
                 <Outlet />
             </div>
             <Toaster position="bottom-right" toastOptions={{ duration: TOAST_DURATION }} />
