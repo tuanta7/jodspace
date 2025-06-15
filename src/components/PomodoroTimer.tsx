@@ -90,7 +90,7 @@ function PomodoroTimer() {
     };
 
     return (
-        <div className="min-w-fit max-md:w-full flex flex-col p-3 gap-3 border-2 border-neutral-600 rounded-lg">
+        <div className="min-w-fit max-md:w-full flex flex-col p-3 gap-3 border-1 border-neutral-600 rounded-lg">
             <progress
                 className="progress"
                 value={timerState.remainingSeconds}
@@ -164,7 +164,7 @@ function MinutesSelector({ setSelected, minutes, disabled, selected }: MinutesSe
     return minutes.map((m) => (
         <Button
             key={m}
-            className={`btn btn-sm border border-neutral-700 w-16 ${
+            className={`btn btn-sm border border-neutral-600 w-16 ${
                 m === selected ? 'bg-primary text-primary-content' : ''
             }`}
             onClick={() => setSelected(m)}

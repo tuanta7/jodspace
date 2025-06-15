@@ -10,7 +10,7 @@ interface PreviewProps {
 
 function Preview({ contents }: PreviewProps) {
     return (
-        <div className="h-[80vh] markdown-body p-10">
+        <div className="h-[80vh] markdown-body p-10 rounded-lg border-2 border-neutral-600">
             <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath]}
                 rehypePlugins={[rehypeHighlight, rehypeKatex]}
