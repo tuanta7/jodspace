@@ -1,9 +1,10 @@
 import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
+import MainLayout from '../features/layouts/MainLayout.tsx';
 import { Toaster } from 'sonner';
-import MainLayout from '../features/layouts/MainLayout';
 import { HomeIcon } from '@heroicons/react/24/outline';
 import { TOAST_DURATION } from '../utils/constants';
+import { Fragment } from 'react/jsx-runtime';
 
 export const Route = createRootRoute({
     component: RootComponent,
@@ -20,12 +21,12 @@ export const Route = createRootRoute({
 
 function RootComponent() {
     return (
-        <MainLayout>
-            <div className="py-3 px-6">
+        <Fragment>
+            <MainLayout>
                 <Outlet />
-            </div>
+            </MainLayout>
             <Toaster position="bottom-right" toastOptions={{ duration: TOAST_DURATION }} />
             <TanStackRouterDevtools position="bottom-right" />
-        </MainLayout>
+        </Fragment>
     );
 }

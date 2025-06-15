@@ -9,3 +9,8 @@
     list-style: disc;
     margin-bottom: 1em;
 }
+
+.monaco-editor {
+    flex: 1;
+    min-width: 0;
+}

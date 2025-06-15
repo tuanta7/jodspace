@@ -10,13 +10,15 @@ interface PreviewProps {
 
 function Preview({ contents }: PreviewProps) {
     return (
-        <ReactMarkdown
-            remarkPlugins={[remarkGfm, remarkMath]}
-            rehypePlugins={[rehypeHighlight, rehypeKatex]}
-            components={{}}
-        >
-            {contents}
-        </ReactMarkdown>
+        <div className="h-[80vh] markdown-body p-10">
+            <ReactMarkdown
+                remarkPlugins={[remarkGfm, remarkMath]}
+                rehypePlugins={[rehypeHighlight, rehypeKatex]}
+                components={{}}
+            >
+                {contents}
+            </ReactMarkdown>
+        </div>
     );
 }
 

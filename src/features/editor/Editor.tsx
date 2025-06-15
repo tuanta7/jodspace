@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import MonacoEditor from '@monaco-editor/react';
+import { editor } from 'monaco-editor';
+
 import {
-    ArrowDownTrayIcon,
     FolderOpenIcon,
     BoldIcon,
     ItalicIcon,
@@ -11,19 +12,20 @@ import {
     CodeBracketIcon,
     ArrowUpTrayIcon,
     ShieldExclamationIcon,
-    QueueListIcon,
     ArrowsRightLeftIcon,
     StrikethroughIcon,
+    Squares2X2Icon,
+    PhotoIcon,
 } from '@heroicons/react/24/outline';
-
-import Preview from './Preview';
 
 import * as prettier from 'prettier/standalone';
 import * as parserMarkdown from 'prettier/parser-markdown';
+import ExportButton from './ExportButton';
+import Preview from './Preview';
 
 function Editor() {
     const [preview, setPreview] = useState(false);
-    const [contents, setContents] = useState(localStorage.getItem('file-name-contents') || ''); // consider IndexedDB for better storage
+    const [contents, setContents] = useState(localStorage.getItem('file-name-contents') || '');
 
     const onContentsChange = (value: string | undefined) => {
         setContents(value || '');
@@ -31,13 +33,13 @@ function Editor() {
     };
 
     useEffect(() => {
-        document.addEventListener('keydown', (e) => {
+        const keydownHandler = (e: KeyboardEvent) => {
             if (e.ctrlKey && e.key === 's') {
                 e.preventDefault();
                 prettier
                     .format(contents, {
                         parser: 'markdown',
-                        printWidth: 80,
+                        printWidth: 120,
                         tabWidth: 4,
                         plugins: [parserMarkdown],
                     })
@@ -45,76 +47,102 @@ function Editor() {
                         setContents(formatted);
                     });
             }
-        });
+        };
+
+        document.addEventListener('keydown', keydownHandler);
+        return () => document.removeEventListener('keydown', keydownHandler);
+    }, [contents]);
+
+    const editorRef = useRef<editor.IEditor | null>(null);
+    useEffect(() => {
+        const onResize = () => {
+            editorRef.current?.layout();
+        };
+
+        window.addEventListener('resize', onResize);
+        return () => window.removeEventListener('resize', onResize);
     });
 
     return (
-        <div className="flex flex-col gap-3">
-            <div className="flex flex-wrap justify-between gap-2">
-                <div className="flex flex-wrap gap-2">
-                    <button className="btn btn-sm w-28 text-primary" onClick={() => setPreview(!preview)}>
-                        <ArrowsRightLeftIcon className="w-4" /> {preview ? 'Edit' : 'Preview'}
+        <div className="w-full min-h-max  flex flex-col gap-3">
+            <div className="flex flex-wrap-reverse justify-between gap-2">
+                <div className="flex flex-wrap gap-2 items-center">
+                    <button className="btn btn-sm w-10">
+                        <BoldIcon className="w-4 h-4" />
                     </button>
                     <button className="btn btn-sm">
-                        <CloudArrowUpIcon className="w-4" /> Save
+                        <ItalicIcon className="w-4 h-4" />
                     </button>
                     <button className="btn btn-sm">
-                        <FolderOpenIcon className="w-4" /> Open
+                        <StrikethroughIcon className="w-4 h-4" />
                     </button>
                     <button className="btn btn-sm">
-                        <ArrowDownTrayIcon className="w-4" /> Export
+                        <ListBulletIcon className="w-4 h-4" />
                     </button>
                     <button className="btn btn-sm">
-                        <ArrowUpTrayIcon className="w-4" /> Upload
+                        <PhotoIcon className="w-4 h-4" />
+                    </button>
+                    <button className="btn btn-sm">
+                        <Squares2X2Icon className="w-4 h-4" />
+                    </button>
+                    <button className="btn btn-sm">
+                        <CodeBracketIcon className="w-4 h-4" />
+                        <span className="hidden md:inline">Code</span>
+                    </button>
+                    <button className="btn btn-sm">
+                        <VariableIcon className="w-4 h-4" />
+                        <span className="hidden md:inline">Math</span>
+                    </button>
+                    <button className="btn btn-sm">
+                        <ShieldExclamationIcon className="w-4 h-4" />
+                        <span className="hidden md:inline">Alerts</span>
                     </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                    <button className="btn btn-sm">
-                        <BoldIcon className="w-4" />
+                    <button className="btn btn-sm text-primary w-28" onClick={() => setPreview(!preview)}>
+                        <ArrowsRightLeftIcon className="w-4 h-4" />
+                        {preview ? 'Edit' : 'Preview'}
                     </button>
                     <button className="btn btn-sm">
-                        <ItalicIcon className="w-4" />
+                        <CloudArrowUpIcon className="w-4 h-4" />
+                        <span className="hidden md:inline">Save</span>
                     </button>
                     <button className="btn btn-sm">
-                        <StrikethroughIcon className="w-4" />
+                        <FolderOpenIcon className="w-4 h-4" />
+                        <span className="hidden md:inline">Open</span>
                     </button>
                     <button className="btn btn-sm">
-                        <ListBulletIcon className="w-4" />
+                        <ArrowUpTrayIcon className="w-4 h-4" />
+                        <span className="hidden md:inline">Upload</span>
                     </button>
-                    <button className="btn btn-sm">
-                        <QueueListIcon className="w-4" /> Table
-                    </button>
-                    <button className="btn btn-sm">
-                        <CodeBracketIcon className="w-4" /> Code
-                    </button>
-                    <button className="btn btn-sm" disabled={'premium' === 'premium'}>
-                        <VariableIcon className="w-4" /> Math
-                    </button>
-                    <button className="btn btn-sm" disabled={'premium' === 'premium'}>
-                        <ShieldExclamationIcon className="w-4" /> Admonitions
-                    </button>
+                    <ExportButton />
                 </div>
             </div>
-            <div className="h-[80vh] overflow-hidden border-2 border-neutral-700 rounded-lg">
-                {preview ? (
-                    <div className="markdown-body p-10 h-full">
-                        <Preview contents={contents} />
-                    </div>
-                ) : (
-                    <MonacoEditor
-                        className=""
-                        height="80vh"
-                        defaultLanguage="markdown"
-                        value={contents}
-                        onChange={onContentsChange}
-                        theme="vs-dark"
-                        options={{
-                            minimap: { enabled: false },
-                            padding: { top: 20, bottom: 20 },
-                        }}
-                    />
-                )}
-            </div>
+            {preview ? (
+                <Preview contents={contents} />
+            ) : (
+                <MonacoEditor
+                    className="border-2 border-neutral-600 rounded-lg overflow-hidden"
+                    height="100%"
+                    width="100%"
+                    defaultLanguage="markdown"
+                    value={contents}
+                    onChange={onContentsChange}
+                    onMount={(editor) => {
+                        editorRef.current = editor;
+                    }}
+                    theme="vs-dark"
+                    options={{
+                        minimap: { enabled: false },
+                        padding: { top: 20, bottom: 20 },
+                        smoothScrolling: true,
+                        automaticLayout: true,
+                        wordWrap: 'on',
+                        wordBreak: 'keepAll',
+                        wrappingStrategy: 'advanced',
+                    }}
+                />
+            )}
         </div>
     );
 }

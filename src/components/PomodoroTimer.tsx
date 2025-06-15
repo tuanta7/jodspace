@@ -90,14 +90,14 @@ function PomodoroTimer() {
     };
 
     return (
-        <div className="flex flex-col p-4 gap-4 rounded-xl">
+        <div className="w-full min-w-max flex flex-col p-3 gap-3 rounded-xl">
             <progress
                 className="progress"
                 value={timerState.remainingSeconds}
                 max={timerState.isBreaking ? settings.break * 60 : settings.focus * 60}
             />
-            <div className="flex items-center justify-between gap-4">
-                <div className="text-6xl font-semibold">{timeDisplay(timerState.remainingSeconds)}</div>
+            <div className="flex items-center justify-between gap-3">
+                <div className="text-7xl font-semibold">{timeDisplay(timerState.remainingSeconds)}</div>
                 <div className="flex flex-col justify-between gap-3">
                     <Button className="btn btn-sm" onClick={handleAddTime}>
                         + 5 min

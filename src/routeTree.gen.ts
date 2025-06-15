@@ -11,11 +11,18 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as WorkspaceImport } from './routes/workspace'
 import { Route as IndexImport } from './routes/index'
 import { Route as CallbackGoogleImport } from './routes/callback/google'
 import { Route as CallbackGithubImport } from './routes/callback/github'
 
 // Create/Update Routes
+
+const WorkspaceRoute = WorkspaceImport.update({
+  id: '/workspace',
+  path: '/workspace',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -46,6 +53,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/workspace': {
+      id: '/workspace'
+      path: '/workspace'
+      fullPath: '/workspace'
+      preLoaderRoute: typeof WorkspaceImport
+      parentRoute: typeof rootRoute
+    }
     '/callback/github': {
       id: '/callback/github'
       path: '/callback/github'
@@ -67,12 +81,14 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/workspace': typeof WorkspaceRoute
   '/callback/github': typeof CallbackGithubRoute
   '/callback/google': typeof CallbackGoogleRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/workspace': typeof WorkspaceRoute
   '/callback/github': typeof CallbackGithubRoute
   '/callback/google': typeof CallbackGoogleRoute
 }
@@ -80,27 +96,30 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/workspace': typeof WorkspaceRoute
   '/callback/github': typeof CallbackGithubRoute
   '/callback/google': typeof CallbackGoogleRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/callback/github' | '/callback/google'
+  fullPaths: '/' | '/workspace' | '/callback/github' | '/callback/google'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/callback/github' | '/callback/google'
-  id: '__root__' | '/' | '/callback/github' | '/callback/google'
+  to: '/' | '/workspace' | '/callback/github' | '/callback/google'
+  id: '__root__' | '/' | '/workspace' | '/callback/github' | '/callback/google'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  WorkspaceRoute: typeof WorkspaceRoute
   CallbackGithubRoute: typeof CallbackGithubRoute
   CallbackGoogleRoute: typeof CallbackGoogleRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  WorkspaceRoute: WorkspaceRoute,
   CallbackGithubRoute: CallbackGithubRoute,
   CallbackGoogleRoute: CallbackGoogleRoute,
 }
@@ -116,12 +135,16 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/workspace",
         "/callback/github",
         "/callback/google"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/workspace": {
+      "filePath": "workspace.tsx"
     },
     "/callback/github": {
       "filePath": "callback/github.tsx"
