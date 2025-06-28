@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import Button from './Button.tsx';
-import { PauseCircleIcon, PlayIcon, ClockIcon } from '@heroicons/react/24/outline';
+import { PauseCircleIcon, PlayIcon } from '@heroicons/react/24/outline';
 
 function PomodoroTimer() {
     const intervalID = useRef<ReturnType<typeof setInterval>>();
@@ -90,19 +90,19 @@ function PomodoroTimer() {
     };
 
     return (
-        <div className="flex max-h-[200px] min-w-fit flex-col gap-3 rounded-lg border-1 border-neutral-600 p-3 max-md:w-full">
+        <div className="flex w-full flex-col gap-3 p-3">
             <progress
                 className="progress"
                 value={timerState.remainingSeconds}
                 max={timerState.isBreaking ? settings.break * 60 : settings.focus * 60}
             />
             <div className="flex items-center justify-between gap-3 px-2">
-                <div className="text-5xl font-semibold">{timeDisplay(timerState.remainingSeconds)}</div>
+                <div className="text-4xl font-semibold lg:text-5xl">{timeDisplay(timerState.remainingSeconds)}</div>
                 <div className="flex justify-between gap-3">
-                    <Button className="btn" onClick={handleAddTime}>
+                    <Button className="btn btn-sm" onClick={handleAddTime}>
                         + 5 min
                     </Button>
-                    <Button className="btn" onClick={handleCountdown}>
+                    <Button className="btn btn-sm" onClick={handleCountdown}>
                         {timerState.isRunning ? (
                             <PauseCircleIcon className="h-4 w-4" />
                         ) : (
@@ -123,69 +123,56 @@ function PomodoroTimer() {
 
 function TimerSettingsPanel({ settings, onSettingsChange, isRunning, onFocusChange }: TimerSettingsPanelProps) {
     return (
-        <div className="bg-base-200 collapse">
-            <input type="checkbox" />
-            <div className="collapse-title flex items-center gap-2">
-                <ClockIcon className="h-4 w-4" />
-                <span className="text-xs font-semibold">Settings</span>
+        <div className="grid h-20 grid-cols-3 justify-center gap-3 rounded-xl p-3">
+            <div className="flex h-20 flex-col items-center gap-1">
+                <h2 className="text-sm font-semibold">Focus</h2>
+                <input
+                    type="number"
+                    name="focus"
+                    className="input input-bordered input-sm text-center"
+                    value={settings.focus}
+                    onChange={(e) => {
+                        const m = Number(e.target.value);
+                        onFocusChange(m);
+                        onSettingsChange({
+                            ...settings,
+                            focus: m,
+                        });
+                    }}
+                    min="1"
+                    disabled={isRunning}
+                />
             </div>
-            <div className="collapse-content flex flex-col gap-3">
-                <div className="flex items-center justify-between gap-6">
-                    <span className="text-sm font-semibold">Focus</span>
-                    <div className="grid grid-cols-3 gap-3">
-                        <MinutesSelector
-                            setSelected={(val) => {
-                                onSettingsChange({ ...settings, focus: val });
-                                onFocusChange(val);
-                            }}
-                            minutes={[25, 30, 35]}
-                            disabled={isRunning}
-                            selected={settings.focus}
-                        />
-                    </div>
-                </div>
-                <div className="flex items-center justify-between gap-6">
-                    <span className="text-sm font-semibold">Break</span>
-                    <div className="grid grid-cols-3 gap-3">
-                        <MinutesSelector
-                            setSelected={(val) => onSettingsChange({ ...settings, break: val })}
-                            minutes={[5, 10, 15]}
-                            disabled={isRunning}
-                            selected={settings.break}
-                        />
-                    </div>
-                </div>
+            <div className="flex flex-col items-center gap-1">
+                <h2 className="text-sm font-semibold">Break </h2>
+                <input
+                    type="number"
+                    name="shortBreak"
+                    className="input input-bordered input-sm text-center"
+                    value={settings.break}
+                    min="1"
+                    disabled={isRunning}
+                />
+            </div>
+            <div className="flex flex-col items-center gap-1">
+                <h2 className="text-sm font-semibold">Loops</h2>
+                <input
+                    type="number"
+                    name="loops"
+                    className="input input-bordered input-sm align-center text-center"
+                    value={4}
+                    min="1"
+                    disabled={isRunning}
+                />
             </div>
         </div>
     );
-}
-
-function MinutesSelector({ setSelected, minutes, disabled, selected }: MinutesSelectorProps) {
-    return minutes.map((m) => (
-        <Button
-            key={m}
-            className={`btn btn-sm w-16 border border-neutral-600 ${
-                m === selected ? 'bg-primary text-primary-content' : ''
-            }`}
-            onClick={() => setSelected(m)}
-            disabled={disabled}
-        >
-            {m + ':00'}
-        </Button>
-    ));
 }
 
 type TimerState = {
     isRunning: boolean;
     isBreaking: boolean;
     remainingSeconds: number;
-};
-
-type MinutesSelectorProps = {
-    setSelected: (selector: number) => void;
-    minutes: number[];
-    disabled: boolean;
-    selected: number;
 };
 
 type TimerSettingsPanelProps = {

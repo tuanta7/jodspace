@@ -53,55 +53,55 @@ function Editor() {
     }, [contents]);
 
     return (
-        <div className="w-full flex flex-col gap-3">
+        <div className="flex w-full flex-col gap-3">
             <div className="flex flex-wrap-reverse justify-between gap-2">
-                <div className="flex flex-wrap gap-2 items-center">
+                <div className="flex flex-wrap items-center gap-2">
                     <button className="btn btn-sm w-10">
-                        <BoldIcon className="w-4 h-4" />
+                        <BoldIcon className="h-4 w-4" />
                     </button>
                     <button className="btn btn-sm">
-                        <ItalicIcon className="w-4 h-4" />
+                        <ItalicIcon className="h-4 w-4" />
                     </button>
                     <button className="btn btn-sm">
-                        <StrikethroughIcon className="w-4 h-4" />
+                        <StrikethroughIcon className="h-4 w-4" />
                     </button>
                     <button className="btn btn-sm">
-                        <ListBulletIcon className="w-4 h-4" />
+                        <ListBulletIcon className="h-4 w-4" />
                     </button>
                     <button className="btn btn-sm">
-                        <PhotoIcon className="w-4 h-4" />
+                        <PhotoIcon className="h-4 w-4" />
                     </button>
                     <button className="btn btn-sm">
-                        <Squares2X2Icon className="w-4 h-4" />
+                        <Squares2X2Icon className="h-4 w-4" />
                     </button>
                     <button className="btn btn-sm">
-                        <CodeBracketIcon className="w-4 h-4" />
+                        <CodeBracketIcon className="h-4 w-4" />
                         <span className="hidden md:inline">Code</span>
                     </button>
                     <button className="btn btn-sm">
-                        <VariableIcon className="w-4 h-4" />
+                        <VariableIcon className="h-4 w-4" />
                         <span className="hidden md:inline">Math</span>
                     </button>
                     <button className="btn btn-sm">
-                        <ShieldExclamationIcon className="w-4 h-4" />
+                        <ShieldExclamationIcon className="h-4 w-4" />
                         <span className="hidden md:inline">Alerts</span>
                     </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
                     <button className="btn btn-sm text-primary w-28" onClick={() => setPreview(!preview)}>
-                        <ArrowsRightLeftIcon className="w-4 h-4" />
+                        <ArrowsRightLeftIcon className="h-4 w-4" />
                         {preview ? 'Edit' : 'Preview'}
                     </button>
                     <button className="btn btn-sm">
-                        <CloudArrowUpIcon className="w-4 h-4" />
+                        <CloudArrowUpIcon className="h-4 w-4" />
                         <span className="hidden md:inline">Save</span>
                     </button>
                     <button className="btn btn-sm">
-                        <FolderOpenIcon className="w-4 h-4" />
+                        <FolderOpenIcon className="h-4 w-4" />
                         <span className="hidden md:inline">Open</span>
                     </button>
                     <button className="btn btn-sm">
-                        <ArrowUpTrayIcon className="w-4 h-4" />
+                        <ArrowUpTrayIcon className="h-4 w-4" />
                         <span className="hidden md:inline">Upload</span>
                     </button>
                     <ExportButton />
@@ -111,7 +111,7 @@ function Editor() {
                 <Preview contents={contents} />
             ) : (
                 <MonacoEditor
-                    className="border-2 border-neutral-600 rounded-lg overflow-hidden"
+                    className="overflow-hidden rounded-lg border-2 border-neutral-600"
                     height="80vh"
                     width="100%"
                     defaultLanguage="markdown"

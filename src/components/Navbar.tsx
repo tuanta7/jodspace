@@ -9,13 +9,13 @@ interface NavbarProps {
 
 function Navbar({ element }: NavbarProps) {
     return (
-        <nav className="navbar p-3 flex justify-between items-center">
+        <nav className="navbar flex items-center justify-between p-3">
             <div className="navbar-start">
                 <button className="btn btn-sm btn-ghost">
                     <Bars3Icon className="w-6" />
                 </button>
-                <a href="/" className="text-xl btn btn-ghost p-0 mx-2 no-animation hover:bg-transparent">
-                    Gookie Workspace
+                <a href="/" className="btn btn-ghost no-animation mx-2 p-0 text-xl hover:bg-transparent">
+                    Jod Workspace
                 </a>
             </div>
             <div className="navbar-end gap-3">
@@ -44,7 +44,7 @@ function ThemeController() {
                 onChange={(e: ChangeEvent<HTMLInputElement>) => handleToggle(e)}
             />
             <span className="swap-off">
-                <SunIcon className=" h-6 w-6" />
+                <SunIcon className="h-6 w-6" />
             </span>
             <span className="swap-on flex items-center">
                 <MoonIcon className="h-5 w-5" />
