@@ -9,12 +9,15 @@ function PomodoroTimer() {
     const [settings, setSettings] = useState<TimerSettings>({
         focus: 25,
         break: 5,
+        loops: 4,
     });
 
     const [timerState, setTimerState] = useState<TimerState>({
         isRunning: false,
         isBreaking: false,
         remainingSeconds: 25 * 60,
+        currentLoop: 1,
+        totalLoops: 4,
     });
 
     const clearTimer = useCallback(() => {
@@ -27,6 +30,7 @@ function PomodoroTimer() {
             ...prev,
             isRunning: false,
             isBreaking: false,
+            currentLoop: 1,
         }));
     }, []);
 
@@ -41,17 +45,33 @@ function PomodoroTimer() {
             setTimerState((prev) => {
                 if (prev.remainingSeconds <= 0) {
                     if (prev.isBreaking) {
+                        // Break finished, start next focus session
+                        const nextLoop = prev.currentLoop + 1;
+                        if (nextLoop > settings.loops) {
+                            // All loops completed, stop timer
+                            clearTimer();
+                            return {
+                                ...prev,
+                                isRunning: false,
+                                isBreaking: false,
+                                remainingSeconds: settings.focus * 60,
+                                currentLoop: 1,
+                            };
+                        }
                         return {
                             ...prev,
                             isBreaking: false,
                             remainingSeconds: settings.focus * 60,
+                            currentLoop: nextLoop,
+                        };
+                    } else {
+                        // Focus session finished, start break
+                        return {
+                            ...prev,
+                            isBreaking: true,
+                            remainingSeconds: settings.break * 60,
                         };
                     }
-                    return {
-                        ...prev,
-                        isBreaking: true,
-                        remainingSeconds: settings.break * 60,
-                    };
                 }
                 return {
                     ...prev,
@@ -59,7 +79,7 @@ function PomodoroTimer() {
                 };
             });
         }, 1000);
-    }, [settings]);
+    }, [settings, clearTimer]);
 
     const handleCountdown = useCallback(() => {
         if (timerState.isRunning) {
@@ -90,14 +110,21 @@ function PomodoroTimer() {
     };
 
     return (
-        <div className="flex w-full flex-col gap-3 p-3">
+        <div className="flex w-full flex-col gap-2 p-3">
             <progress
                 className="progress"
                 value={timerState.remainingSeconds}
                 max={timerState.isBreaking ? settings.break * 60 : settings.focus * 60}
             />
             <div className="flex items-center justify-between gap-3 px-2">
-                <div className="text-4xl font-semibold lg:text-5xl">{timeDisplay(timerState.remainingSeconds)}</div>
+                <div className="flex flex-col">
+                    <div className="mb-1 text-4xl font-semibold lg:text-5xl">
+                        {timeDisplay(timerState.remainingSeconds)}
+                    </div>
+                    <div className="text-sm text-gray-500">
+                        {timerState.isBreaking ? 'Break' : 'Focus'} - Loop {timerState.currentLoop}/{settings.loops}
+                    </div>
+                </div>
                 <div className="flex justify-between gap-3">
                     <Button className="btn btn-sm" onClick={handleAddTime}>
                         + 5 min
@@ -122,6 +149,28 @@ function PomodoroTimer() {
 }
 
 function TimerSettingsPanel({ settings, onSettingsChange, isRunning, onFocusChange }: TimerSettingsPanelProps) {
+    const handleFocusChange = (value: number) => {
+        onFocusChange(value);
+        onSettingsChange({
+            ...settings,
+            focus: value,
+        });
+    };
+
+    const handleBreakChange = (value: number) => {
+        onSettingsChange({
+            ...settings,
+            break: value,
+        });
+    };
+
+    const handleLoopsChange = (value: number) => {
+        onSettingsChange({
+            ...settings,
+            loops: value,
+        });
+    };
+
     return (
         <div className="grid h-20 grid-cols-3 justify-center gap-3 rounded-xl p-3">
             <div className="flex h-20 flex-col items-center gap-1">
@@ -129,27 +178,21 @@ function TimerSettingsPanel({ settings, onSettingsChange, isRunning, onFocusChan
                 <input
                     type="number"
                     name="focus"
-                    className="input input-bordered input-sm text-center"
+                    className="input input-bordered input-sm text-center font-medium"
                     value={settings.focus}
-                    onChange={(e) => {
-                        const m = Number(e.target.value);
-                        onFocusChange(m);
-                        onSettingsChange({
-                            ...settings,
-                            focus: m,
-                        });
-                    }}
+                    onChange={(e) => handleFocusChange(Number(e.target.value))}
                     min="1"
                     disabled={isRunning}
                 />
             </div>
             <div className="flex flex-col items-center gap-1">
-                <h2 className="text-sm font-semibold">Break </h2>
+                <h2 className="text-sm font-semibold">Break</h2>
                 <input
                     type="number"
-                    name="shortBreak"
-                    className="input input-bordered input-sm text-center"
+                    name="break"
+                    className="input input-bordered input-sm text-center font-medium"
                     value={settings.break}
+                    onChange={(e) => handleBreakChange(Number(e.target.value))}
                     min="1"
                     disabled={isRunning}
                 />
@@ -159,8 +202,9 @@ function TimerSettingsPanel({ settings, onSettingsChange, isRunning, onFocusChan
                 <input
                     type="number"
                     name="loops"
-                    className="input input-bordered input-sm align-center text-center"
-                    value={4}
+                    className="input input-bordered input-sm align-center text-center font-medium"
+                    value={settings.loops}
+                    onChange={(e) => handleLoopsChange(Number(e.target.value))}
                     min="1"
                     disabled={isRunning}
                 />
@@ -173,6 +217,8 @@ type TimerState = {
     isRunning: boolean;
     isBreaking: boolean;
     remainingSeconds: number;
+    currentLoop: number;
+    totalLoops: number;
 };
 
 type TimerSettingsPanelProps = {
@@ -185,6 +231,7 @@ type TimerSettingsPanelProps = {
 type TimerSettings = {
     focus: number;
     break: number;
+    loops: number;
 };
 
 export default PomodoroTimer;

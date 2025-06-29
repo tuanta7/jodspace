@@ -17,6 +17,9 @@ import {
     PhotoIcon,
 } from '@heroicons/react/24/outline';
 
+import 'github-markdown-css/github-markdown.css';
+import 'katex/dist/katex.min.css';
+
 import * as prettier from 'prettier/standalone';
 import * as parserMarkdown from 'prettier/parser-markdown';
 import ExportButton from './ExportButton';
@@ -32,19 +35,16 @@ function Editor() {
     };
 
     useEffect(() => {
-        const keydownHandler = (e: KeyboardEvent) => {
+        const keydownHandler = async (e: KeyboardEvent) => {
             if (e.ctrlKey && e.key === 's') {
                 e.preventDefault();
-                prettier
-                    .format(contents, {
-                        parser: 'markdown',
-                        printWidth: 120,
-                        tabWidth: 4,
-                        plugins: [parserMarkdown],
-                    })
-                    .then((formatted) => {
-                        setContents(formatted);
-                    });
+                const formatted = await prettier.format(contents, {
+                    parser: 'markdown',
+                    printWidth: 120,
+                    tabWidth: 4,
+                    plugins: [parserMarkdown],
+                });
+                onContentsChange(formatted);
             }
         };
 
