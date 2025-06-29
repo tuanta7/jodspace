@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import MonacoEditor from '@monaco-editor/react';
+import { editor } from 'monaco-editor';
 
 import {
     FolderOpenIcon,
-    BoldIcon,
     ItalicIcon,
     VariableIcon,
     ListBulletIcon,
@@ -24,10 +24,16 @@ import * as prettier from 'prettier/standalone';
 import * as parserMarkdown from 'prettier/parser-markdown';
 import ExportButton from './ExportButton';
 import Preview from './Preview';
+import BoldButton from './BoldButton';
 
 function Editor() {
     const [preview, setPreview] = useState(false);
     const [contents, setContents] = useState(localStorage.getItem('file-name-contents') || '');
+    const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
+
+    const onEditorMount = (editor: editor.IStandaloneCodeEditor) => {
+        editorRef.current = editor;
+    };
 
     const onContentsChange = (value: string | undefined) => {
         setContents(value || '');
@@ -56,9 +62,7 @@ function Editor() {
         <div className="flex w-full flex-col gap-3">
             <div className="flex flex-wrap-reverse justify-between gap-2">
                 <div className="flex flex-wrap items-center gap-2">
-                    <button className="btn btn-sm w-10">
-                        <BoldIcon className="h-4 w-4" />
-                    </button>
+                    <BoldButton editorRef={editorRef} />
                     <button className="btn btn-sm">
                         <ItalicIcon className="h-4 w-4" />
                     </button>
@@ -73,6 +77,7 @@ function Editor() {
                     </button>
                     <button className="btn btn-sm">
                         <Squares2X2Icon className="h-4 w-4" />
+                        <span className="hidden md:inline">Table</span>
                     </button>
                     <button className="btn btn-sm">
                         <CodeBracketIcon className="h-4 w-4" />
@@ -104,7 +109,7 @@ function Editor() {
                         <ArrowUpTrayIcon className="h-4 w-4" />
                         <span className="hidden md:inline">Upload</span>
                     </button>
-                    <ExportButton />
+                    <ExportButton contents={contents} />
                 </div>
             </div>
             {preview ? (
@@ -117,6 +122,7 @@ function Editor() {
                     defaultLanguage="markdown"
                     value={contents}
                     onChange={onContentsChange}
+                    onMount={onEditorMount}
                     theme="vs-dark"
                     options={{
                         minimap: { enabled: false },

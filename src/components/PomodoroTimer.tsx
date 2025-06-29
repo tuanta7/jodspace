@@ -1,6 +1,4 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-
-import Button from './Button.tsx';
 import { PauseCircleIcon, PlayIcon } from '@heroicons/react/24/outline';
 
 function PomodoroTimer() {
@@ -110,32 +108,32 @@ function PomodoroTimer() {
     };
 
     return (
-        <div className="flex w-full flex-col gap-2 p-3">
-            <progress
-                className="progress"
-                value={timerState.remainingSeconds}
-                max={timerState.isBreaking ? settings.break * 60 : settings.focus * 60}
-            />
-            <div className="flex items-center justify-between gap-3 px-2">
+        <div className="flex w-full min-w-fit flex-col gap-2">
+            <div className="px-3">
+                <progress
+                    className="progress"
+                    value={timerState.remainingSeconds}
+                    max={timerState.isBreaking ? settings.break * 60 : settings.focus * 60}
+                />
+            </div>
+            <div className="mx-3 flex items-center justify-between gap-2 px-1">
                 <div className="flex flex-col">
-                    <div className="mb-1 text-4xl font-semibold lg:text-5xl">
-                        {timeDisplay(timerState.remainingSeconds)}
-                    </div>
+                    <div className="mb-2 text-5xl font-semibold">{timeDisplay(timerState.remainingSeconds)}</div>
                     <div className="text-sm text-gray-500">
                         {timerState.isBreaking ? 'Break' : 'Focus'} - Loop {timerState.currentLoop}/{settings.loops}
                     </div>
                 </div>
-                <div className="flex justify-between gap-3">
-                    <Button className="btn btn-sm" onClick={handleAddTime}>
+                <div className="flex justify-between gap-1">
+                    <button className="btn btn-sm" onClick={handleAddTime}>
                         + 5 min
-                    </Button>
-                    <Button className="btn btn-sm" onClick={handleCountdown}>
+                    </button>
+                    <button className="btn btn-sm" onClick={handleCountdown}>
                         {timerState.isRunning ? (
                             <PauseCircleIcon className="h-4 w-4" />
                         ) : (
                             <PlayIcon className="h-4 w-4" />
                         )}
-                    </Button>
+                    </button>
                 </div>
             </div>
             <TimerSettingsPanel
