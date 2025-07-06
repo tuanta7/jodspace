@@ -10,11 +10,21 @@ interface PreviewProps {
 
 function Preview({ contents }: PreviewProps) {
     return (
-        <div className="h-[80vh] markdown-body p-10 rounded-lg border-2 border-neutral-600">
+        <div className="markdown-body h-[80vh] overflow-auto rounded-lg border-2 border-neutral-600 p-10">
             <ReactMarkdown
                 remarkPlugins={[remarkGfm, remarkMath]}
                 rehypePlugins={[rehypeHighlight, rehypeKatex]}
-                components={{}}
+                components={{
+                    img: ({ ...props }) => (
+                        <div className="flex justify-center">
+                            <img
+                                {...props}
+                                className="h-auto max-w-full rounded-lg object-contain"
+                                style={{ maxHeight: '300px' }}
+                            />
+                        </div>
+                    ),
+                }}
             >
                 {contents}
             </ReactMarkdown>
