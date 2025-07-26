@@ -35,7 +35,11 @@ function Gif() {
                 alt={randomGif?.title || 'GIF'}
                 className="h-full w-full object-cover object-center"
             />
-            <button onClick={fetchRandomGif} disabled={isLoading} className="btn btn-sm absolute top-2 left-2">
+            <button
+                onClick={fetchRandomGif}
+                disabled={isLoading}
+                className="btn btn-sm absolute top-2 left-2 border-0 opacity-80"
+            >
                 {isLoading ? '...' : '✨ Random (Beta)'}
             </button>
         </div>

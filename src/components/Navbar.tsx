@@ -9,12 +9,12 @@ interface NavbarProps {
 
 function Navbar({ element }: NavbarProps) {
     return (
-        <nav className="navbar flex items-center justify-between p-3">
+        <nav className="navbar flex items-center justify-between px-6 py-3">
             <div className="navbar-start">
-                <button className="btn btn-sm btn-ghost">
+                <button className="btn btn-sm btn-ghost hover:text-primary border-0 p-0 hover:bg-transparent">
                     <Bars3Icon className="w-6" />
                 </button>
-                <a href="/" className="btn btn-ghost no-animation mx-2 p-0 text-xl hover:bg-transparent">
+                <a href="/" className="btn btn-ghost no-animation mx-2 border-0 p-0 text-xl hover:bg-transparent">
                     Jod Workspace
                 </a>
             </div>
