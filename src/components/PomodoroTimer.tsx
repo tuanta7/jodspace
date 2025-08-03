@@ -108,24 +108,27 @@ function PomodoroTimer() {
     };
 
     return (
-        <div className="flex w-full min-w-fit flex-col gap-2">
+        <div className="flex h-full w-full min-w-fit flex-col justify-between gap-2">
             <div className="px-3">
                 <progress
-                    className="progress"
+                    className="progress text-primary/80"
                     value={timerState.remainingSeconds}
                     max={timerState.isBreaking ? settings.break * 60 : settings.focus * 60}
                 />
             </div>
-            <div className="mx-3 flex items-center justify-between gap-2 px-1">
+            <div
+                className="mx-3 flex items-center justify-between gap-2 border-b-1 px-1 pb-6"
+                style={{
+                    borderImage: 'linear-gradient(90deg, #34d399 0%, #fbbf24 50%, #f87171 100%) 1',
+                }}
+            >
                 <div className="flex flex-col">
-                    <div className="mb-2 text-5xl font-semibold max-xl:text-4xl">
-                        {timeDisplay(timerState.remainingSeconds)}
-                    </div>
+                    <div className="mb-2 text-6xl font-semibold">{timeDisplay(timerState.remainingSeconds)}</div>
                     <div className="text-sm font-semibold text-gray-500">
                         {timerState.isBreaking ? 'Break' : 'Focus'} - Loop {timerState.currentLoop}/{settings.loops}
                     </div>
                 </div>
-                <div className="flex justify-between gap-1">
+                <div className="flex flex-col justify-between gap-1">
                     <button className="btn btn-sm" onClick={handleAddTime}>
                         + 5 min
                     </button>
