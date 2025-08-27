@@ -1,3 +1,4 @@
+import { useEffect, useState, useRef } from 'react';
 import { HeartIcon } from '@heroicons/react/24/solid';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 
@@ -8,11 +9,43 @@ export const Route = createFileRoute('/')({
 function Home() {
     const navigate = useNavigate({});
 
+    const features = [
+        'Built-in Formatting',
+        'Beautiful Math Equations',
+        'Instant Live Preview',
+        'Sync Across All Devices',
+        'Export as PDF Easily',
+    ];
+    const [typedTitle, setTypedTitle] = useState('');
+    const [featureIdx, setFeatureIdx] = useState(0);
+    const [charIdx, setCharIdx] = useState(0);
+    const typingTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+    const intervalTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+    useEffect(() => {
+        if (charIdx <= features[featureIdx].length) {
+            setTypedTitle(features[featureIdx].slice(0, charIdx));
+            typingTimeout.current = setTimeout(() => setCharIdx(charIdx + 1), 100);
+        } else {
+            intervalTimeout.current = setTimeout(() => {
+                setCharIdx(0);
+                setFeatureIdx((featureIdx + 1) % features.length);
+            }, 1000);
+        }
+        return () => {
+            if (typingTimeout.current) clearTimeout(typingTimeout.current);
+            if (intervalTimeout.current) clearTimeout(intervalTimeout.current);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [charIdx, featureIdx]);
+
     return (
         <div className="bg-base-100 mb-10 flex min-h-[80vh] flex-col items-center justify-center px-4 py-12">
             <div className="mb-12 max-w-2xl text-center">
-                <h1 className="text-primary mb-4 text-4xl font-extrabold md:text-5xl">
-                    Jod: Online Markdown & Math Editor
+                <h1 className="text-primary mb-10 text-4xl font-extrabold md:text-5xl">
+                    <span className="mb-3 block">Jod: Online Markdown</span>
+                    <span className=""> & {typedTitle}</span>
+                    <span className="border-primary animate-pulse border-r-2 pr-1"></span>
                 </h1>
                 <p className="mb-6 px-3 text-lg md:text-xl">
                     Effortlessly write, preview, and export Markdown with built-in math support (KaTeX), tables, code,
