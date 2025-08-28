@@ -125,7 +125,7 @@ function Editor() {
                     onMount={onEditorMount}
                     theme="vs-dark"
                     options={{
-                        fontSize: 18,
+                        fontSize: 16,
                         minimap: { enabled: false },
                         padding: { top: 20, bottom: 20 },
                         smoothScrolling: true,

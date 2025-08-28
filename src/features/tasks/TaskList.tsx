@@ -74,7 +74,7 @@ function TaskList() {
                     </button>
                 </div>
             </div>
-            <div className="m-2 grid max-h-[180px] gap-3 overflow-auto pr-2">
+            <div className="m-2 grid max-h-[130px] gap-3 overflow-auto pr-2">
                 {showCreateForm && <TaskCreate setOpen={setShowCreateForm} />}
                 {data?.tasks && data.tasks.length === 0 && (
                     <div className="flex flex-col items-center justify-center gap-3 py-6 text-sm">

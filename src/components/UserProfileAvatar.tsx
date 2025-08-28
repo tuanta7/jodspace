@@ -10,7 +10,7 @@ const UserProfileAvatar: React.FC<UserProfileAvatarProps> = ({ user }) => {
         <div className="dropdown dropdown-end">
             <label
                 tabIndex={0}
-                className="avatar border-primary/80 flex cursor-pointer items-center justify-evenly rounded-4xl border-2 p-1 transition focus:scale-95"
+                className="avatar border-primary/60 flex cursor-pointer items-center justify-evenly rounded-4xl border p-1 transition focus:scale-95"
             >
                 <div className="h-8 w-8 rounded-full">
                     {user.avatarUrl ? (
@@ -21,7 +21,7 @@ const UserProfileAvatar: React.FC<UserProfileAvatarProps> = ({ user }) => {
                         </span>
                     )}
                 </div>
-                <span className="px-4 text-sm">{user.displayName}</span>
+                <span className="px-3 text-sm max-md:hidden">{user.displayName}</span>
             </label>
             <ul
                 tabIndex={0}

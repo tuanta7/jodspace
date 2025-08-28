@@ -27,7 +27,7 @@ function GoogleCallback() {
     function onToastClose() {
         sessionStorage.removeItem('code_verifier');
         sessionStorage.removeItem('state');
-        apiClient.redirect('/');
+        apiClient.redirect('/workspace');
     }
 
     const { mutate: exchangeToken } = useMutation<TokenResponse, Error, TokenRequest>({

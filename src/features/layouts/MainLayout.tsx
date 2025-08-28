@@ -11,14 +11,14 @@ function MainLayout({ children }: PropsWithChildren) {
     return (
         <div className="relative min-h-screen w-full">
             <aside
-                className={`bg-base-200 fixed top-0 left-0 z-40 h-screen shadow-lg transition-all duration-300 ${openSideBar ? 'w-80 opacity-100' : 'pointer-events-none w-0 opacity-0'}`}
+                className={`bg-base-200 fixed top-0 left-0 z-40 h-screen shadow-lg transition-all duration-300 ${openSideBar ? 'w-96 opacity-100' : 'pointer-events-none w-0 opacity-0'}`}
                 style={{ minWidth: 0 }}
             >
-                <Sidebar />
+                <Sidebar onClose={() => setOpenSideBar(false)} />
             </aside>
             {openSideBar && (
                 <div
-                    className="bg-opacity-40 fixed inset-0 z-30 bg-black transition-opacity duration-300"
+                    className="bg-opacity-40 bg-base-300/80 fixed inset-0 z-30 transition-opacity duration-300"
                     onClick={() => setOpenSideBar(false)}
                 />
             )}
