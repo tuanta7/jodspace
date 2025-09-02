@@ -25,7 +25,7 @@ function ExportButton({ contents }: ExportButtonProps) {
     };
 
     return (
-        <button className="btn btn-sm" onClick={exportToMarkdown}>
+        <button className="btn" onClick={exportToMarkdown}>
             <ArrowDownTrayIcon className="h-4 w-4" />
             <span className="hidden md:inline">Export</span>
         </button>

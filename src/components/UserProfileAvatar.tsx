@@ -1,11 +1,34 @@
 import React from 'react';
-import { UserProfile } from '../store/userStore';
+import { UserProfile, useUserStore } from '../store/userStore';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { apiClient } from '../services/apiClient';
 
 interface UserProfileAvatarProps {
     user: UserProfile;
 }
 
 const UserProfileAvatar: React.FC<UserProfileAvatarProps> = ({ user }) => {
+    const queryClient = useQueryClient();
+    const { mutate } = useMutation({
+        mutationFn: async () => {
+            return apiClient.sendRequest('POST', `/oauth/logout`, {
+                withCredentials: true,
+            });
+        },
+        onSuccess: () => {
+            setUser(null);
+            queryClient.clear();
+            queryClient.invalidateQueries();
+            queryClient.removeQueries();
+        },
+    });
+
+    const setUser = useUserStore((s) => s.setUser);
+    const handleLogout = () => {
+        mutate();
+    };
+
     return (
         <div className="dropdown dropdown-end">
             <label
@@ -25,7 +48,7 @@ const UserProfileAvatar: React.FC<UserProfileAvatarProps> = ({ user }) => {
             </label>
             <ul
                 tabIndex={0}
-                className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-56 p-2 shadow"
+                className="menu menu-sm dropdown-content bg-base-300/90 rounded-box z-[1] mt-3 w-56 p-2 shadow"
             >
                 <li className="mb-2">
                     <div className="flex flex-col px-2 py-1">
@@ -40,9 +63,9 @@ const UserProfileAvatar: React.FC<UserProfileAvatarProps> = ({ user }) => {
                     <a href="/settings">Settings</a>
                 </li>
                 <li>
-                    <a href="/logout" className="text-error">
+                    <button className="text-error" onClick={handleLogout}>
                         Logout
-                    </a>
+                    </button>
                 </li>
             </ul>
         </div>

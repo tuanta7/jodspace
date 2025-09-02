@@ -38,7 +38,7 @@ function TaskList() {
 
     return (
         <div className="w-full py-2 pl-2">
-            <div className="mb-6 flex items-center gap-3 px-2">
+            <div className="mb-4 flex items-center gap-3 px-2">
                 <h2 className="flex-1 text-lg font-bold">To-do List</h2>
                 <div className="ml-auto flex items-center gap-2">
                     <button
@@ -50,7 +50,7 @@ function TaskList() {
                         &lt;
                     </button>
                     <span className="text-xs font-semibold">
-                        {page} / {totalPages}
+                        {page} / {totalPages || 1}
                     </span>
                     <button
                         className="btn btn-xs btn-ghost"
@@ -74,7 +74,7 @@ function TaskList() {
                     </button>
                 </div>
             </div>
-            <div className="m-2 grid max-h-[130px] gap-3 overflow-auto pr-2">
+            <div className="m-2 grid max-h-[140px] gap-3 overflow-auto pr-2">
                 {showCreateForm && <TaskCreate setOpen={setShowCreateForm} />}
                 {data?.tasks && data.tasks.length === 0 && (
                     <div className="flex flex-col items-center justify-center gap-3 py-6 text-sm">

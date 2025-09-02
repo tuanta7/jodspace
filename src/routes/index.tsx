@@ -11,10 +11,10 @@ function Home() {
 
     const features = [
         'Built-in Formatting',
-        'Beautiful Math Equations',
-        'Instant Live Preview',
-        'Sync Across All Devices',
-        'Export as PDF Easily',
+        'Math Equations',
+        'Live Preview',
+        'Devices Synchronization',
+        'Multiple Export Formats', // md, pdf, html + css
     ];
     const [typedTitle, setTypedTitle] = useState('');
     const [featureIdx, setFeatureIdx] = useState(0);
@@ -43,8 +43,8 @@ function Home() {
         <div className="bg-base-100 mb-10 flex min-h-[80vh] flex-col items-center justify-center px-4 py-12">
             <div className="mb-12 max-w-2xl text-center">
                 <h1 className="text-primary mb-10 text-4xl font-extrabold md:text-5xl">
-                    <span className="mb-3 block">Jod: Online Markdown</span>
-                    <span className=""> & {typedTitle}</span>
+                    <span className="mb-3 block">Jod: Online Markdown with </span>
+                    <span className="">{typedTitle}</span>
                     <span className="border-primary animate-pulse border-r-2 pr-1"></span>
                 </h1>
                 <p className="mb-6 px-3 text-lg md:text-xl">

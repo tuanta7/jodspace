@@ -5,7 +5,6 @@ import { editor } from 'monaco-editor';
 import {
     FolderOpenIcon,
     ItalicIcon,
-    VariableIcon,
     ListBulletIcon,
     CloudArrowUpIcon,
     CodeBracketIcon,
@@ -25,6 +24,7 @@ import * as parserMarkdown from 'prettier/parser-markdown';
 import ExportButton from './ExportButton';
 import Preview from './Preview';
 import BoldButton from './BoldButton';
+import MathButton from './MathButton';
 
 function Editor() {
     const [preview, setPreview] = useState(false);
@@ -63,49 +63,46 @@ function Editor() {
             <div className="flex flex-wrap-reverse justify-between gap-2">
                 <div className="flex flex-wrap items-center gap-2">
                     <BoldButton editorRef={editorRef} />
-                    <button className="btn btn-sm">
+                    <button className="btn">
                         <ItalicIcon className="h-4 w-4" />
                     </button>
-                    <button className="btn btn-sm">
+                    <button className="btn">
                         <StrikethroughIcon className="h-4 w-4" />
                     </button>
-                    <button className="btn btn-sm">
+                    <button className="btn">
                         <ListBulletIcon className="h-4 w-4" />
                     </button>
-                    <button className="btn btn-sm">
+                    <button className="btn">
                         <PhotoIcon className="h-4 w-4" />
                     </button>
-                    <button className="btn btn-sm">
+                    <button className="btn">
                         <Squares2X2Icon className="h-4 w-4" />
                         <span className="hidden md:inline">Table</span>
                     </button>
-                    <button className="btn btn-sm">
+                    <button className="btn">
                         <CodeBracketIcon className="h-4 w-4" />
                         <span className="hidden md:inline">Code</span>
                     </button>
-                    <button className="btn btn-sm">
-                        <VariableIcon className="h-4 w-4" />
-                        <span className="hidden md:inline">Math</span>
-                    </button>
-                    <button className="btn btn-sm">
+                    <MathButton editorRef={editorRef} />
+                    <button className="btn">
                         <ShieldExclamationIcon className="h-4 w-4" />
                         <span className="hidden md:inline">Alerts</span>
                     </button>
                 </div>
                 <div className="flex flex-wrap gap-2">
-                    <button className="btn btn-sm text-primary w-28" onClick={() => setPreview(!preview)}>
+                    <button className="btn text-primary w-28" onClick={() => setPreview(!preview)}>
                         <ArrowsRightLeftIcon className="h-4 w-4" />
                         {preview ? 'Edit' : 'Preview'}
                     </button>
-                    <button className="btn btn-sm">
+                    <button className="btn">
                         <CloudArrowUpIcon className="h-4 w-4" />
                         <span className="hidden md:inline">Save</span>
                     </button>
-                    <button className="btn btn-sm">
+                    <button className="btn">
                         <FolderOpenIcon className="h-4 w-4" />
                         <span className="hidden md:inline">Open</span>
                     </button>
-                    <button className="btn btn-sm">
+                    <button className="btn">
                         <ArrowUpTrayIcon className="h-4 w-4" />
                         <span className="hidden md:inline">Upload</span>
                     </button>
