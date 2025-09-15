@@ -1,7 +1,7 @@
 // Extend the Window interface to include __ENV__
 declare global {
     interface Window {
-        __ENV__?: Config;
+        __ENV__: Config;
     }
 }
 
@@ -29,7 +29,6 @@ interface Provider {
     CLIENT_ID: string;
 }
 
-const env: Partial<Config> = window.__ENV__ || {};
-
+const env: Config = window.__ENV__;
 export const OAUTH = env.OAUTH;
 export const API = env.API;

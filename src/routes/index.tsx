@@ -11,10 +11,10 @@ function Home() {
 
     const features = [
         'Built-in Formatting',
-        'Math Equations',
-        'Live Preview',
-        'Devices Synchronization',
-        'Multiple Export Formats', // md, pdf, html + css
+        'Beautiful Math Equations',
+        //'Instross All Devices',
+        'Export as PDF Easily',
+        'Google Drive Integration',
     ];
     const [typedTitle, setTypedTitle] = useState('');
     const [featureIdx, setFeatureIdx] = useState(0);
