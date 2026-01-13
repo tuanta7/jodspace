@@ -1,8 +1,6 @@
 # Jod
 
-📝 Online markdown editor with automatic formatting.
 
-## Setup Development Environment
 
 ```shell
 # install NVM
@@ -19,8 +17,3 @@ nvm --version
 nvm list
 nvm install --lts
 ```
-
-## References
-
-- [Google PKCE Flow](https://developers.google.com/identity/protocols/oauth2/native-app)
-- [GIPHY Developer](https://developers.giphy.com/)
