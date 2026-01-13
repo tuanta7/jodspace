@@ -6,7 +6,7 @@ export const Route = createFileRoute('/board')({
 
 function BoardPage() {
     return (
-        <div className="h-full w-full">
+        <div className="mx-auto max-w-8xl h-full">
             <Outlet />
         </div>
     );

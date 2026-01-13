@@ -32,7 +32,7 @@ function RootComponent() {
             <div className="min-h-screen">
                 <Sidebar open={openSideBar} onClose={() => setOpenSideBar(false)} />
                 <Navbar openSideBar={openSideBar} setOpenSideBar={setOpenSideBar} />
-                <main className="mx-auto h-[90vh] max-w-6xl px-4 py-6">
+                <main className="h-[90vh] w-full px-4 py-6">
                     <Outlet />
                 </main>
                 <Footer />

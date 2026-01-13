@@ -30,8 +30,9 @@ const BrainstormSpace: FC = () => {
     };
 
     return (
-        <div className="flex h-full flex-col">
-            <div className="sketch-card mb-4 p-4">
+        <div className="flex h-full w-full flex-col">
+            {/* Header */}
+            <div className="sketch-card p-4 mb-4">
                 <div className="flex items-center justify-between">
                     <div>
                         <h1 className="flex items-center gap-2 text-2xl font-bold">
@@ -56,23 +57,36 @@ const BrainstormSpace: FC = () => {
                     </div>
                 </div>
             </div>
-            <div
-                ref={boardRef}
-                className="border-[var(--sketch-border)] relative min-h-[500px] flex-1 overflow-hidden rounded-lg border-2 border-dashed"
-            >
-                {notes.length === 0 && (
-                    <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="text-center text-[var(--sketch-pencil)]">
-                            <LightBulbIcon className="mx-auto mb-4 h-16 w-16 opacity-30" />
-                            <p className="mb-2 text-xl">Your brainstorm space is empty!</p>
-                            <p className="text-sm">Click "Add Note" to start capturing your ideas</p>
-                        </div>
-                    </div>
-                )}
 
-                {notes.map((note) => (
-                    <StickyNote key={note.id} note={note} />
-                ))}
+            {/* Board with attendance sidebar */}
+            <div className="flex gap-4 flex-1">
+                {/* Board */}
+                <div
+                    ref={boardRef}
+                    className="border-[var(--sketch-border)] relative min-h-[500px] flex-1 overflow-hidden rounded-lg border-2 border-dashed"
+                    style={{
+                        background: `
+                            linear-gradient(90deg, rgba(200,195,188,0.3) 1px, transparent 1px),
+                            linear-gradient(rgba(200,195,188,0.3) 1px, transparent 1px),
+                            var(--sketch-bg)
+                        `,
+                        backgroundSize: '20px 20px',
+                    }}
+                >
+                    {notes.length === 0 && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="text-center text-[var(--sketch-pencil)]">
+                                <LightBulbIcon className="mx-auto mb-4 h-16 w-16 opacity-30" />
+                                <p className="mb-2 text-xl">Your brainstorm space is empty!</p>
+                                <p className="text-sm">Click "Add Note" to start capturing your ideas</p>
+                            </div>
+                        </div>
+                    )}
+
+                    {notes.map((note) => (
+                        <StickyNote key={note.id} note={note} />
+                    ))}
+                </div>
             </div>
         </div>
     );

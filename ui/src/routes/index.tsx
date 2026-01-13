@@ -10,7 +10,7 @@ export const Route = createFileRoute('/')({
 
 function Homepage() {
       return (
-          <div className="space-y-6">
+          <div className="mx-auto max-w-6xl space-y-6">
               <div className="sketch-card sketch-tilt-1 p-6">
                   <h1 className="sketch-header flex items-center gap-2 text-2xl font-bold">
                       <SparklesIcon className="h-6 w-6 text-yellow-500" />

@@ -11,7 +11,7 @@ function Navbar({ openSideBar, setOpenSideBar }: NavbarProps) {
     const [showLogin, setShowLogin] = useState(false);
 
     return (
-        <header className="sketch-card sketch-tilt-1 mx-4 mt-4">
+        <header className="sketch-card mx-4 mt-4">
             <div className="flex items-center justify-between gap-4 px-5 py-3">
                 <div className="flex items-center gap-3">
                     <button
