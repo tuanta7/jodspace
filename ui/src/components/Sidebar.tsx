@@ -21,9 +21,24 @@ interface ExtraItem {
 
 const Sidebar: FC<SidebarProps> = ({ open, onClose }) => {
     const navItems: NavItem[] = [
-        { icon: <PencilSquareIcon className="h-6 w-6" />, label: 'Note', href: '#', description: 'Scribble your thoughts' },
-        { icon: <LightBulbIcon className="h-6 w-6" />, label: 'Brainstorm', href: '/board/brainstorm', description: 'Collaborate & create' },
-        { icon: <RocketLaunchIcon className="h-6 w-6" />, label: 'Battleship', href: '/board', description: 'Fun game break' },
+        {
+            icon: <PencilSquareIcon className="h-6 w-6" />,
+            label: 'Note',
+            href: '/board/note',
+            description: 'Scribble your thoughts',
+        },
+        {
+            icon: <LightBulbIcon className="h-6 w-6" />,
+            label: 'Brainstorm',
+            href: '/board/brainstorm',
+            description: 'Collaborate & create',
+        },
+        {
+            icon: <RocketLaunchIcon className="h-6 w-6" />,
+            label: 'Battleship',
+            href: '/battleship',
+            description: 'Fun game break',
+        },
     ];
 
     const extraItems: ExtraItem[] = [
