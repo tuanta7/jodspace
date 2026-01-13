@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as BoardRouteImport } from './routes/board'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BoardBrainstormRouteImport } from './routes/board/brainstorm'
 
 const BoardRoute = BoardRouteImport.update({
   id: '/board',
@@ -22,31 +23,39 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BoardBrainstormRoute = BoardBrainstormRouteImport.update({
+  id: '/brainstorm',
+  path: '/brainstorm',
+  getParentRoute: () => BoardRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/board': typeof BoardRoute
+  '/board': typeof BoardRouteWithChildren
+  '/board/brainstorm': typeof BoardBrainstormRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/board': typeof BoardRoute
+  '/board': typeof BoardRouteWithChildren
+  '/board/brainstorm': typeof BoardBrainstormRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/board': typeof BoardRoute
+  '/board': typeof BoardRouteWithChildren
+  '/board/brainstorm': typeof BoardBrainstormRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/board'
+  fullPaths: '/' | '/board' | '/board/brainstorm'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/board'
-  id: '__root__' | '/' | '/board'
+  to: '/' | '/board' | '/board/brainstorm'
+  id: '__root__' | '/' | '/board' | '/board/brainstorm'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  BoardRoute: typeof BoardRoute
+  BoardRoute: typeof BoardRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +74,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/board/brainstorm': {
+      id: '/board/brainstorm'
+      path: '/brainstorm'
+      fullPath: '/board/brainstorm'
+      preLoaderRoute: typeof BoardBrainstormRouteImport
+      parentRoute: typeof BoardRoute
+    }
   }
 }
 
+interface BoardRouteChildren {
+  BoardBrainstormRoute: typeof BoardBrainstormRoute
+}
+
+const BoardRouteChildren: BoardRouteChildren = {
+  BoardBrainstormRoute: BoardBrainstormRoute,
+}
+
+const BoardRouteWithChildren = BoardRoute._addFileChildren(BoardRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  BoardRoute: BoardRoute,
+  BoardRoute: BoardRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

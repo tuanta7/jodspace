@@ -1,8 +1,13 @@
+import { FireIcon} from '@heroicons/react/24/outline';
+
 function SpaceList() {
     return (
         <div className="sketch-card p-6">
             <div className="sketch-header flex items-center justify-between">
-                <h2 className="text-xl font-semibold">📌 Pinned Spaces</h2>
+                <div className="text-xl font-semibold flex items-center gap-2">
+                    <FireIcon className="h-6 w-6 text-[var(--sketch-accent)]" />
+                    <span>Pinned Spaces</span>
+                </div>
                 <span className="sketch-tag">3 items</span>
             </div>
             <div className="mt-4 grid gap-3">

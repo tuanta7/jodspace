@@ -21,7 +21,7 @@ function Navbar({ openSideBar, setOpenSideBar }: NavbarProps) {
                     >
                         <Bars3Icon className="h-5 w-5" />
                     </button>
-                    <a href="/" className="flex items-center gap-2">
+                    <a href="/" className="flex items-center gap-2 text-[var(--sketch-pencil)]">
                         <span className="sketch-underline text-xl font-semibold tracking-tight">JODSPACE</span>
                     </a>
                 </div>

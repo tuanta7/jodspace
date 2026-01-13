@@ -1,6 +1,6 @@
-# Jod
+# Jodspace
 
-
+Online whiteboard for real-time collaborating
 
 ```shell
 # install NVM
