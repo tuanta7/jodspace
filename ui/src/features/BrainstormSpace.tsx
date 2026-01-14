@@ -63,7 +63,7 @@ const BrainstormSpace: FC = () => {
                 {/* Board */}
                 <div
                     ref={boardRef}
-                    className="border-[var(--sketch-border)] relative min-h-[500px] flex-1 overflow-hidden rounded-lg border-2 border-dashed"
+                    className="border-[var(--sketch-border)] relative min-h-[300px] sm:min-h-[400px] md:min-h-[500px] flex-1 overflow-hidden rounded-xl border-2 border-dashed"
                     style={{
                         background: `
                             linear-gradient(90deg, rgba(200,195,188,0.3) 1px, transparent 1px),

@@ -91,15 +91,9 @@ const Sidebar: FC<SidebarProps> = ({ open, onClose }) => {
                         ))}
                     </ul>
                 </nav>
-
-                {/* Divider */}
                 <div className="mx-4 my-2 flex items-center gap-2 text-[var(--sketch-border)]">
-                    <span>~</span>
                     <div className="h-px flex-1 bg-[var(--sketch-border)]" />
-                    <span>~</span>
                 </div>
-
-                {/* Extra items */}
                 <nav className="p-4">
                     <ul className="space-y-1">
                         {extraItems.map((item) => (
@@ -116,11 +110,9 @@ const Sidebar: FC<SidebarProps> = ({ open, onClose }) => {
                         ))}
                     </ul>
                 </nav>
-
-                {/* Footer doodle */}
                 <div className="absolute bottom-4 left-0 right-0 text-center">
                     <div className="flex justify-center gap-1 text-[var(--sketch-border)]">
-                        <SparklesIcon className="h-4 w-4" />
+                        <SparklesIcon className="h-4 w-4 text-yellow-500" />
                     </div>
                     <p className="mt-1 text-xs text-[var(--sketch-pencil)]">Sketch your dreams</p>
                 </div>

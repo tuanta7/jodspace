@@ -8,11 +8,10 @@ export const Route = createFileRoute('/board/brainstorm')({
 
 function BrainstormPage() {
     return (
-        <div className="flex h-full  justify-center gap-3 px-6">
-            <div className="flex-1">
+        <div className="flex h-full flex-col-reverse lg:flex-row justify-center gap-3 px-3 sm:px-6">
+            <div className="flex-1 min-h-0">
                 <BrainstormSpace />
             </div>
-
             <BrainstormSpaceAttendance />
         </div>
     );

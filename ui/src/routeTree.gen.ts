@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as BoardRouteImport } from './routes/board'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BoardNoteRouteImport } from './routes/board/note'
 import { Route as BoardBrainstormRouteImport } from './routes/board/brainstorm'
 
 const BoardRoute = BoardRouteImport.update({
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BoardNoteRoute = BoardNoteRouteImport.update({
+  id: '/note',
+  path: '/note',
+  getParentRoute: () => BoardRoute,
+} as any)
 const BoardBrainstormRoute = BoardBrainstormRouteImport.update({
   id: '/brainstorm',
   path: '/brainstorm',
@@ -33,24 +39,27 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/board': typeof BoardRouteWithChildren
   '/board/brainstorm': typeof BoardBrainstormRoute
+  '/board/note': typeof BoardNoteRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/board': typeof BoardRouteWithChildren
   '/board/brainstorm': typeof BoardBrainstormRoute
+  '/board/note': typeof BoardNoteRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/board': typeof BoardRouteWithChildren
   '/board/brainstorm': typeof BoardBrainstormRoute
+  '/board/note': typeof BoardNoteRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/board' | '/board/brainstorm'
+  fullPaths: '/' | '/board' | '/board/brainstorm' | '/board/note'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/board' | '/board/brainstorm'
-  id: '__root__' | '/' | '/board' | '/board/brainstorm'
+  to: '/' | '/board' | '/board/brainstorm' | '/board/note'
+  id: '__root__' | '/' | '/board' | '/board/brainstorm' | '/board/note'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -74,6 +83,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/board/note': {
+      id: '/board/note'
+      path: '/note'
+      fullPath: '/board/note'
+      preLoaderRoute: typeof BoardNoteRouteImport
+      parentRoute: typeof BoardRoute
+    }
     '/board/brainstorm': {
       id: '/board/brainstorm'
       path: '/brainstorm'
@@ -86,10 +102,12 @@ declare module '@tanstack/react-router' {
 
 interface BoardRouteChildren {
   BoardBrainstormRoute: typeof BoardBrainstormRoute
+  BoardNoteRoute: typeof BoardNoteRoute
 }
 
 const BoardRouteChildren: BoardRouteChildren = {
   BoardBrainstormRoute: BoardBrainstormRoute,
+  BoardNoteRoute: BoardNoteRoute,
 }
 
 const BoardRouteWithChildren = BoardRoute._addFileChildren(BoardRouteChildren)

@@ -1,5 +1,5 @@
 import { FC, useState, useRef, useEffect } from 'react';
-import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { TrashIcon, ArrowsPointingOutIcon } from '@heroicons/react/24/outline';
 import { StickyNote as StickyNoteType, useStickyNotesStore } from '../store/stickyNotesStore';
 
 interface StickyNoteProps {
@@ -9,21 +9,12 @@ interface StickyNoteProps {
 const StickyNote: FC<StickyNoteProps> = ({ note }) => {
     const { updateNote, deleteNote, bringToFront } = useStickyNotesStore();
     const [isDragging, setIsDragging] = useState(false);
-    const [isEditing, setIsEditing] = useState(false);
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const noteRef = useRef<HTMLDivElement>(null);
 
-    useEffect(() => {
-        if (isEditing && textareaRef.current) {
-            textareaRef.current.focus();
-            textareaRef.current.select();
-        }
-    }, [isEditing]);
-
     const handleMouseDown = (e: React.MouseEvent) => {
-        if (isEditing) return;
-
+        e.stopPropagation();
         bringToFront(note.id);
         setIsDragging(true);
         const rect = noteRef.current?.getBoundingClientRect();
@@ -67,20 +58,11 @@ const StickyNote: FC<StickyNoteProps> = ({ note }) => {
         };
     }, [isDragging, dragOffset, note.id, note.width, note.height, updateNote]);
 
-    const handleBlur = () => {
-        setIsEditing(false);
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent) => {
-        if (e.key === 'Escape') {
-            setIsEditing(false);
-        }
-    };
 
     return (
         <div
             ref={noteRef}
-            className={`absolute group select-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} transition-transform duration-75`}
+            className="absolute group select-none transition-transform duration-75"
             style={{
                 left: note.x,
                 top: note.y,
@@ -89,7 +71,6 @@ const StickyNote: FC<StickyNoteProps> = ({ note }) => {
                 zIndex: note.zIndex,
                 transform: isDragging ? 'rotate(-2deg) scale(1.02)' : 'rotate(0deg)',
             }}
-            onMouseDown={handleMouseDown}
         >
             {/* Main note body */}
             <div
@@ -156,42 +137,30 @@ const StickyNote: FC<StickyNoteProps> = ({ note }) => {
                             filter: 'brightness(0.9)',
                         }}
                     />
-                    <TrashIcon className="absolute bottom-1 right-1 h-3.5 w-3.5  opacity-0 group-hover/fold:opacity-100 transition-opacity" />
+                    <TrashIcon className="absolute bottom-1 right-1 h-3.5 w-3.5 opacity-0 group-hover/fold:opacity-100 transition-opacity" />
                 </button>
+
+                {/* Move handle in top-left corner */}
+                <div
+                    className={`absolute top-0 left-0 w-8 h-8 z-20 flex items-center justify-center ${isDragging ? 'cursor-grabbing' : 'cursor-grab'} opacity-0 group-hover:opacity-100 transition-opacity`}
+                    onMouseDown={handleMouseDown}
+                    title="Drag to move"
+                >
+                    <ArrowsPointingOutIcon className="h-4 w-4 text-gray-600" />
+                </div>
+
                 <div className="relative h-full p-4 pt-5">
-                    <button
-                        className="absolute top-2 right-2 p-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200 hover:bg-black/10 rounded-full z-10"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            setIsEditing(true);
+                    <textarea
+                        ref={textareaRef}
+                        className="w-full h-full resize-none bg-transparent outline-none text-gray-700 leading-relaxed"
+                        style={{
+                            fontFamily: "'Patrick Hand', cursive",
+                            fontSize: '1.1rem',
                         }}
-                    >
-                        <PencilIcon className="h-4 w-4 text-gray-600" />
-                    </button>
-                    {isEditing ? (
-                        <textarea
-                            ref={textareaRef}
-                            className="w-full h-full resize-none bg-transparent outline-none text-gray-700 leading-relaxed"
-                            style={{
-                                fontFamily: "'Patrick Hand', cursive",
-                                fontSize: '1.1rem',
-                            }}
-                            value={note.content}
-                            onChange={(e) => updateNote(note.id, { content: e.target.value })}
-                            onBlur={handleBlur}
-                            onKeyDown={handleKeyDown}
-                        />
-                    ) : (
-                        <p
-                            className="w-full h-full overflow-hidden text-gray-700 whitespace-pre-wrap leading-relaxed"
-                            style={{
-                                fontFamily: "'Patrick Hand', cursive",
-                                fontSize: '1.1rem',
-                            }}
-                        >
-                            {note.content || 'Write your idea here...'}
-                        </p>
-                    )}
+                        value={note.content}
+                        onChange={(e) => updateNote(note.id, { content: e.target.value })}
+                        placeholder="Write your idea here..."
+                    />
                 </div>
 
                 {/* Left edge shadow for depth */}

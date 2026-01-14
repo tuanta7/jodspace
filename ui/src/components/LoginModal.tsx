@@ -1,42 +1,97 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { createPortal } from 'react-dom';
-import {SparklesIcon} from '@heroicons/react/24/outline';
+import { UserIcon } from '@heroicons/react/24/outline';
+import { useGuestLogin } from '../hooks/useAuth';
+import { toast } from 'sonner';
 
 interface LoginModalProps {
     open: boolean;
     onClose: () => void;
+    onSuccess?: () => void;
 }
 
-const LoginModal: FC<LoginModalProps> = ({ open, onClose }) => {
+const LoginModal: FC<LoginModalProps> = ({ open, onClose, onSuccess }) => {
+    const [nickname, setNickname] = useState('');
+    const guestLoginMutation = useGuestLogin();
+
     if (!open) return null;
 
+    const isLoading = guestLoginMutation.isPending;
+
+    const handleGuestStart = () => {
+        if (nickname.trim()) {
+            guestLoginMutation.mutate(
+                { nickname: nickname.trim() },
+                {
+                    onSuccess: () => {
+                        toast.success(`Welcome, ${nickname.trim()}!`);
+                        setNickname('');
+                        onClose();
+                        onSuccess?.();
+                    },
+                    onError: (error) => {
+                        toast.error('Failed to login as guest. Please try again.');
+                        console.error('Guest login error:', error);
+                    },
+                }
+            );
+        }
+    };
+
+    const handleGoogleLogin = () => {
+        // TODO: Implement Google OAuth flow
+        toast.info('Google login coming soon!');
+    };
+
     const modalContent = (
-        <div
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-        >
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
             <div
-                className="absolute inset-0 bg-[var(--sketch-ink)]/30 backdrop-blur-sm"
-                onClick={onClose}
+                className="bg-[var(--sketch-ink)]/30 absolute inset-0 backdrop-blur-sm"
+                onClick={isLoading ? undefined : onClose}
             />
             <div className="sketch-card relative z-10 w-full max-w-xs p-6 text-center">
                 <div className="mb-4">
-                    <span className="text-5xl">🎨</span>
                     <h3 className="mt-3 text-2xl font-bold">Hey there!</h3>
-                    <p className="mt-1 text-[var(--sketch-pencil)]">
-                        Ready to sketch some ideas?
-                    </p>
+                    <p className="mt-1 text-[var(--sketch-pencil)]">Ready to sketch some ideas?</p>
                 </div>
-                <div className="my-4 flex items-center justify-center gap-2 text-[var(--sketch-border)]">
-                    <span>✿</span>
-                    <span>~</span>
-                    <span>✿</span>
-                    <span>~</span>
-                    <span>✿</span>
+                <div className="mb-4">
+                    <div className="flex gap-2">
+                        <div className="relative flex-1">
+                            <UserIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--sketch-pencil)]" />
+                            <input
+                                type="text"
+                                placeholder="Enter a nickname"
+                                value={nickname}
+                                onChange={(e) => setNickname(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && !isLoading && handleGuestStart()}
+                                className="placeholder:text-[var(--sketch-pencil)]/60 w-full rounded-lg border-2 border-[var(--sketch-border)] bg-[var(--sketch-paper)] py-2.5 pl-9 pr-3 text-sm focus:border-[var(--sketch-accent)] focus:outline-none disabled:opacity-50"
+                                maxLength={20}
+                                disabled={isLoading}
+                            />
+                        </div>
+                        <button
+                            type="button"
+                            onClick={handleGuestStart}
+                            disabled={!nickname.trim() || isLoading}
+                            className="sketch-btn sketch-btn-primary px-4 py-2 text-sm disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                            {isLoading ? '...' : 'Go!'}
+                        </button>
+                    </div>
+                    <p className="mt-2 text-xs text-[var(--sketch-pencil)]">Start as a guest — no account needed!</p>
                 </div>
+
+                <div className="my-4 flex items-center gap-3 text-xs text-[var(--sketch-pencil)]">
+                    <div className="h-px flex-1 bg-[var(--sketch-border)]" />
+                    <span>or</span>
+                    <div className="h-px flex-1 bg-[var(--sketch-border)]" />
+                </div>
+
                 <button
                     type="button"
-                    className="sketch-btn w-full flex items-center justify-center gap-3 py-3 text-lg"
-                    onClick={onClose}
+                    className="sketch-btn flex w-full items-center justify-center gap-3 py-3 text-lg disabled:cursor-not-allowed disabled:opacity-50"
+                    onClick={handleGoogleLogin}
+                    disabled={isLoading}
                 >
                     <svg className="h-5 w-5" viewBox="0 0 24 24">
                         <path
@@ -58,14 +113,13 @@ const LoginModal: FC<LoginModalProps> = ({ open, onClose }) => {
                     </svg>
                     <span>Continue with Google</span>
                 </button>
-                <p className="mt-5 flex items-center justify-center gap-1 text-sm text-[var(--sketch-pencil)]">
-                    <SparklesIcon className="h-4 w-4" />
-                    No sign-up forms, just vibes
-                    <SparklesIcon className="h-4 w-4" />
+                <p className="mt-3 text-xs text-[var(--sketch-pencil)]">
+                    Login to save & sync your work across devices
                 </p>
+
                 <button
                     onClick={onClose}
-                    className="mt-4 text-xs text-[var(--sketch-border)] hover:text-[var(--sketch-pencil)] transition-colors"
+                    className="mt-4 text-xs text-[var(--sketch-border)] transition-colors hover:text-[var(--sketch-pencil)]"
                 >
                     (click anywhere to close)
                 </button>

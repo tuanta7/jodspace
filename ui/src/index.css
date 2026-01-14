@@ -30,7 +30,7 @@ body {
 .sketch-card {
     background: var(--sketch-paper);
     border: 2px solid var(--sketch-ink);
-    border-radius: 3px;
+    border-radius: 8px;
     box-shadow:
         3px 3px 0 var(--sketch-border),
         -1px -1px 0 var(--sketch-border) inset;
@@ -45,7 +45,7 @@ body {
     right: -2px;
     bottom: -2px;
     border: 1px dashed var(--sketch-pencil);
-    border-radius: 5px;
+    border-radius: 8px;
     pointer-events: none;
     opacity: 0.4;
 }
@@ -54,7 +54,7 @@ body {
 .sketch-btn {
     background: var(--sketch-paper);
     border: 2px solid var(--sketch-ink);
-    border-radius: 4px;
+    border-radius: 8px;
     padding: 0.5rem 1rem;
     font-size: 1rem;
     color: var(--sketch-ink);
