@@ -1,7 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, Fragment } from 'react';
 import { PlusIcon, TrashIcon, PlayIcon, ArrowPathIcon, XMarkIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import * as XLSX from 'xlsx';
+import * as React from 'react';
 
 export const Route = createFileRoute('/random')({
     component: RandomWheel,
@@ -10,16 +11,11 @@ export const Route = createFileRoute('/random')({
 const ITEM_WIDTH = 160;
 
 const COLORS = [
-
-    '#81b29a', // soft
-    '#f2cc8f', // highlight
-    '#3d405b', // dark blue
-    '#f4f1de', // cream
-    '#e9c46a', // yellow
-    '#2a9d8f', // teal
-
-    '#264653', // dark teal
-    '#a8dadc', // light blue
+    '#4b69ff', // Mil-Spec (Rare)
+    '#8847ff', // Restricted (Mythical):
+    '#d32ce6', // Classified (Legendary)
+    '#eb4b4b', // Covert (Ancient):
+    '#ffd700', // Exceedingly Rare (Special/Knives/Gloves)
 ];
 
 function RandomWheel() {
@@ -41,7 +37,7 @@ function RandomWheel() {
             names.forEach((name, idx) => {
                 strip.push({
                     name,
-                    color: COLORS[(i * names.length + idx) % COLORS.length],
+                    color: COLORS[(Math.floor(Math.random() * 3) + names.length + idx) % COLORS.length],
                 });
             });
         }
@@ -68,13 +64,14 @@ function RandomWheel() {
         setWinner(null);
         setShowModal(false);
 
-        // Random winner index
+        // Calculate final position
         const winnerIndex = Math.floor(Math.random() * names.length);
-
-        // Calculate final position - spin through many items then land on winner
-        const spinsBeforeStop = 5 + Math.floor(Math.random() * 3); // 5-7 full cycles
+        const spinsBeforeStop = 5 + Math.floor(Math.random() * 3);
         const itemsToSpin = spinsBeforeStop * names.length + winnerIndex;
-        const finalOffset = itemsToSpin * ITEM_WIDTH;
+
+        // random offset within the item width
+        const randomOffset = (Math.random() - 0.5) * (ITEM_WIDTH * 0.8);
+        const finalOffset = itemsToSpin * ITEM_WIDTH + randomOffset;
 
         // Animate the strip
         if (stripRef.current) {
@@ -147,184 +144,210 @@ function RandomWheel() {
                 console.error('Error reading file:', error);
             }
         };
-        reader.readAsBinaryString(file);
+        reader.readAsArrayBuffer(file);
 
-        // Reset input so same file can be selected again
         if (fileInputRef.current) {
+            // Reset input so same file can be selected again
             fileInputRef.current.value = '';
         }
     };
 
     return (
-        <div className="mx-auto max-w-6xl space-y-4 px-4">
-            {/* Winner Modal */}
+        <Fragment>
             {showModal && winner && (
                 <div
-                    className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+                    className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-black/60 backdrop-blur-sm"
                     onClick={() => setShowModal(false)}
                 >
+                    {[...Array(60)].map((_, i) => {
+                        const colors = ['#ff6b6b', '#4ecdc4', '#ffe66d', '#95e1d3', '#f38181', '#aa96da', '#fcbad3', '#a8d8ea', '#ffd700', '#ff9ff3'];
+                        const size = 8 + Math.random() * 10;
+                        const isRect = Math.random() > 0.2;
+                        return (
+                            <div
+                                key={`fall-${i}`}
+                                className="animate-confetti-fall absolute"
+                                style={
+                                    {
+                                        left: `${Math.random() * 100}%`,
+                                        top: '-20px',
+                                        width: isRect ? `${size}px` : `${size * 0.6}px`,
+                                        height: isRect ? `${size * 0.6}px` : `${size}px`,
+                                        backgroundColor: colors[i % colors.length],
+                                        borderRadius: Math.random() > 0.5 ? '2px' : '50%',
+                                        animationDelay: `${Math.random() * 2}s`,
+                                        '--r': `${Math.random() * 720}deg`,
+                                        '--duration': `${2 + Math.random() * 2}s`,
+                                    } as React.CSSProperties
+                                }
+                            />
+                        );
+                    })}
                     <div
-                        className="sketch-card relative mx-4 w-full max-w-md rounded-xl p-6 text-center animate-in zoom-in-95 duration-200"
+                        className="relative z-10 w-full max-w-md rounded-xl border-2 border-[var(--sketch-ink)] bg-[var(--sketch-paper)] p-3 text-center"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <button
-                            onClick={() => setShowModal(false)}
-                            className="absolute right-3 top-3 text-[var(--sketch-pencil)] hover:text-[var(--sketch-ink)]"
-                        >
-                            <XMarkIcon className="h-5 w-5" />
-                        </button>
-
-                        <div className="text-5xl mb-4">🎉</div>
-                        <h2 className="text-lg text-[var(--sketch-pencil)] mb-2">The winner is...</h2>
-                        <div className="text-3xl font-bold text-[var(--sketch-accent)] mb-6">{winner}</div>
-
-                        <div className="flex flex-col gap-2">
-                            <button
-                                onClick={() => setShowModal(false)}
-                                className="sketch-btn sketch-btn-primary w-full rounded-lg px-4 py-2"
-                            >
-                                Close
-                            </button>
-                            <button
-                                onClick={handleRemoveWinner}
-                                className="sketch-btn flex items-center justify-center gap-2 w-full rounded-lg px-4 py-2 text-red-500 hover:bg-red-50"
-                            >
-                                <TrashIcon className="h-4 w-4" />
-                                Remove Winner & Spin Again
-                            </button>
+                        <div className="flex gap-6 justify-between items-center">
+                            <div className="px-3">
+                                <h2 className="text-lg text-[var(--sketch-pencil)]">The winner is...</h2>
+                                <div className="text-3xl font-bold text-[var(--sketch-accent)]">{winner}</div>
+                            </div>
+                            <div className="flex flex-col gap-2">
+                                <button
+                                    onClick={() => setShowModal(false)}
+                                    className="sketch-btn sketch-btn-primary  rounded-lg px-4 py-2"
+                                >
+                                    Close
+                                </button>
+                                <button
+                                    onClick={handleRemoveWinner}
+                                    className="sketch-btn flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-red-500 hover:bg-red-50"
+                                >
+                                    Remove Winner
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             )}
 
-            <div className="sketch-card rounded-xl p-4 text-center">
-                <h1 className="sketch-header text-2xl font-bold">Random Picker</h1>
-                <div className="relative overflow-hidden rounded-lg" style={{ height: '90px' }}>
-                    <div className="absolute left-1/2 top-0 z-20 h-full w-1 -translate-x-1/2 bg-[var(--sketch-accent)]"></div>
-                    <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-[var(--sketch-paper)] to-transparent" />
-                    <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-[var(--sketch-paper)] to-transparent" />
-                    <div
-                        className="flex h-full items-center"
-                        style={{
-                            paddingLeft: `calc(50% - ${ITEM_WIDTH / 2}px)`,
-                        }}
-                    >
+            <div className="mx-auto max-w-6xl space-y-4 px-4">
+                <div className="sketch-card rounded-xl p-4 text-center">
+                    <h1 className="sketch-header text-2xl font-bold">Random Picker</h1>
+                    <div className="relative overflow-hidden rounded-lg" style={{ height: '100px' }}>
+                        {/*Indicator*/}
+                        <div className="absolute left-1/2 top-0 z-20 h-full w-1 -translate-x-1/2 bg-[var(--sketch-accent)]"></div>
+                        <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-[var(--sketch-paper)] to-transparent" />
+                        <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-[var(--sketch-paper)] to-transparent" />
                         <div
-                            ref={stripRef}
-                            className="flex items-center gap-2"
-                            style={{ transform: 'translateX(0px)' }}
+                            className="flex h-full items-center"
+                            style={{
+                                paddingLeft: `calc(50% - ${ITEM_WIDTH / 2}px)`,
+                            }}
                         >
-                            {strip.map((item, index) => (
-                                <div
-                                    key={index}
-                                    className="flex flex-shrink-0 items-center justify-center rounded-lg border-2 border-[var(--sketch-ink)] font-bold shadow-md"
-                                    style={{
-                                        width: `${ITEM_WIDTH - 8}px`,
-                                        height: '60px',
-                                        backgroundColor: item.color,
-                                        color: ['#f4f1de', '#f2cc8f', '#e9c46a', '#a8dadc'].includes(item.color)
-                                            ? 'var(--sketch-ink)'
-                                            : '#fff',
-                                    }}
-                                >
-                                    {item.name}
-                                </div>
-                            ))}
+                            <div
+                                ref={stripRef}
+                                className="flex items-center gap-2"
+                                style={{ transform: 'translateX(0px)' }}
+                            >
+                                {strip.map((item, index) => (
+                                    <div
+                                        key={index}
+                                        className="relative flex flex-shrink-0 items-center justify-center overflow-hidden rounded-lg border-2 border-[var(--sketch-ink)] bg-[var(--sketch-paper)] font-bold"
+                                        style={{
+                                            width: `${ITEM_WIDTH - 8}px`,
+                                            height: '60px',
+                                            boxShadow: `0 4px 12px -2px ${item.color}70`,
+                                        }}
+                                    >
+                                        <div
+                                            className="absolute bottom-0 left-0 right-0 h-5"
+                                            style={{
+                                                background: `linear-gradient(to top, ${item.color}90, ${item.color}40 50%, transparent)`,
+                                            }}
+                                        />
+                                        <span className="relative z-10">{item.name}</span>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
+                    <div className="mt-4 flex justify-center gap-3">
+                        <button
+                            onClick={spin}
+                            disabled={isSpinning || names.length === 0}
+                            className="sketch-btn sketch-btn-primary flex items-center gap-2 rounded-lg px-6 py-2 text-lg disabled:cursor-not-allowed disabled:opacity-50"
+                        >
+                            <PlayIcon className="h-5 w-5" />
+                            {isSpinning ? 'Spinning...' : 'SPIN!'}
+                        </button>
+                        <button
+                            onClick={reset}
+                            disabled={isSpinning}
+                            className="sketch-btn flex items-center gap-2 rounded-lg px-3 py-2 disabled:opacity-50"
+                        >
+                            <ArrowPathIcon className="h-4 w-4" />
+                            Reset
+                        </button>
+                    </div>
                 </div>
-
-                {/* Spin button */}
-                <div className="mt-4 flex justify-center gap-3">
-                    <button
-                        onClick={spin}
-                        disabled={isSpinning || names.length === 0}
-                        className="sketch-btn sketch-btn-primary flex items-center gap-2 rounded-lg px-6 py-2 text-lg disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                        <PlayIcon className="h-5 w-5" />
-                        {isSpinning ? 'Spinning...' : 'SPIN!'}
-                    </button>
-                    <button
-                        onClick={reset}
-                        disabled={isSpinning}
-                        className="sketch-btn flex items-center gap-2 rounded-lg px-3 py-2 disabled:opacity-50"
-                    >
-                        <ArrowPathIcon className="h-4 w-4" />
-                        Reset
-                    </button>
-                </div>
-            </div>
-            <div className="sketch-card rounded-xl p-4">
-                <div className="flex items-center justify-between mb-2">
-                    <h2 className="text-lg font-bold">Names ({names.length})</h2>
-                    <div className="flex gap-2">
+                <div className="sketch-card rounded-xl p-4">
+                    <div className="mb-2 flex items-center justify-between">
+                        <h2 className="text-lg font-bold">Names ({names.length})</h2>
+                        <div className="flex gap-2">
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept=".xlsx,.xls"
+                                onChange={handleFileImport}
+                                className="hidden"
+                            />
+                            <button
+                                onClick={() => fileInputRef.current?.click()}
+                                className="sketch-btn flex items-center gap-1 rounded-lg px-3 py-1 text-sm"
+                                title="Import from Excel"
+                            >
+                                <ArrowUpTrayIcon className="h-4 w-4" />
+                                Import
+                            </button>
+                            <button
+                                onClick={() => setNames([])}
+                                className="sketch-btn flex items-center gap-1 rounded-lg px-3 py-1 text-sm text-red-500"
+                                disabled={names.length === 0}
+                            >
+                                <TrashIcon className="h-4 w-4" />
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                    <div className="mb-4 flex gap-2">
                         <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept=".xlsx,.xls"
-                            onChange={handleFileImport}
-                            className="hidden"
+                            type="text"
+                            value={newName}
+                            onChange={(e) => setNewName(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && addName()}
+                            placeholder="Enter a name..."
+                            className="sketch-input flex-1 rounded-lg text-sm"
                         />
                         <button
-                            onClick={() => fileInputRef.current?.click()}
-                            className="sketch-btn flex items-center gap-1 rounded-lg px-3 py-1 text-sm"
-                            title="Import from Excel"
+                            onClick={addName}
+                            className="sketch-btn sketch-btn-soft flex items-center gap-1 rounded-lg px-3 py-1"
                         >
-                            <ArrowUpTrayIcon className="h-4 w-4" />
-                            Import
-                        </button>
-                        <button
-                            onClick={() => setNames([])}
-                            className="sketch-btn flex items-center gap-1 rounded-lg px-3 py-1 text-sm text-red-500"
-                            disabled={names.length === 0}
-                        >
-                            <TrashIcon className="h-4 w-4" />
-                            Clear
+                            <PlusIcon className="h-4 w-4" />
+                            Add
                         </button>
                     </div>
-                </div>
-                <div className="flex gap-2 mb-4">
-                    <input
-                        type="text"
-                        value={newName}
-                        onChange={(e) => setNewName(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && addName()}
-                        placeholder="Enter a name..."
-                        className="sketch-input flex-1 rounded-lg text-sm"
-                    />
-                    <button
-                        onClick={addName}
-                        className="sketch-btn sketch-btn-soft flex items-center gap-1 rounded-lg px-3 py-1"
-                    >
-                        <PlusIcon className="h-4 w-4" />
-                        Add
-                    </button>
-                </div>
-                <div className="max-h-48 overflow-y-auto">
-                    {names.length === 0 ? (
-                        <p className="text-center text-sm text-[var(--sketch-pencil)]">No names added yet. Add manually or import from Excel.</p>
-                    ) : (
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2">
-                            {names.map((name, index) => (
-                                <div
-                                    key={index}
-                                    className="group flex items-center justify-between rounded-lg border border-[var(--sketch-border)] px-2 py-1.5 text-sm transition-colors hover:bg-[var(--sketch-bg)]"
-                                    style={{ borderLeftColor: COLORS[index % COLORS.length], borderLeftWidth: '3px' }}
-                                >
-                                    <span className="truncate flex-1" title={name}>{name}</span>
-                                    <button
-                                        onClick={() => removeName(index)}
-                                        className="text-[var(--sketch-pencil)] opacity-0 group-hover:opacity-100 hover:text-red-500 transition-opacity ml-1"
-                                        disabled={isSpinning}
+                    <div className="max-h-48 overflow-y-auto">
+                        {names.length === 0 ? (
+                            <p className="text-center text-sm text-[var(--sketch-pencil)]">
+                                No names added yet. Add manually or import from Excel.
+                            </p>
+                        ) : (
+                            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+                                {names.map((name, index) => (
+                                    <div
+                                        key={index}
+                                        className="group flex items-center justify-between rounded-lg border border-[var(--sketch-border)] px-2 py-1.5 text-sm transition-colors hover:bg-[var(--sketch-bg)]"
                                     >
-                                        <XMarkIcon className="h-4 w-4" />
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                                        <span className="flex-1 truncate" title={name}>
+                                            {name}
+                                        </span>
+                                        <button
+                                            onClick={() => removeName(index)}
+                                            className="ml-1 text-[var(--sketch-pencil)] opacity-0 transition-opacity hover:text-red-500 group-hover:opacity-100"
+                                            disabled={isSpinning}
+                                        >
+                                            <XMarkIcon className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+        </Fragment>
     );
 }
+
+

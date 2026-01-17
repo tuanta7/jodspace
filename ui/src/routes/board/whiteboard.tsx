@@ -175,15 +175,6 @@ function WhiteboardPage() {
         }
 
         ctx.stroke();
-
-        // Draw origin marker
-        const origin = worldToScreen(0, 0);
-        if (origin.x >= -20 && origin.x <= width + 20 && origin.y >= -20 && origin.y <= height + 20) {
-            ctx.fillStyle = '#e07a5f';
-            ctx.beginPath();
-            ctx.arc(origin.x, origin.y, 5, 0, Math.PI * 2);
-            ctx.fill();
-        }
     }, [viewport, worldToScreen]);
 
     useEffect(() => {
