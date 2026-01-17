@@ -1,12 +1,12 @@
-import { FireIcon} from '@heroicons/react/24/outline';
+import { ArchiveBoxIcon } from '@heroicons/react/24/outline';
 
 function SpaceList() {
     return (
         <div className="sketch-card p-6">
             <div className="sketch-header flex items-center justify-between">
-                <div className="text-xl font-semibold flex items-center gap-2">
-                    <FireIcon className="h-6 w-6 text-[var(--sketch-accent)]" />
-                    <span>Pinned Spaces</span>
+                <div className="flex items-center gap-2 text-xl font-semibold">
+                    <ArchiveBoxIcon className="h-6 w-6 text-[var(--sketch-accent)]" />
+                    <span>Latest Spaces</span>
                 </div>
                 <span className="sketch-tag">3 items</span>
             </div>

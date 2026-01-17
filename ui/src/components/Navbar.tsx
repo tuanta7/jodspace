@@ -33,11 +33,14 @@ function Navbar({ openSideBar, setOpenSideBar }: NavbarProps) {
                 </div>
 
                 <nav className="hidden items-center gap-8 md:flex">
-                    <a href="/board/note" className="text-lg transition-colors hover:text-[var(--sketch-accent)]">
-                        Note
+                    <a href="/board/whiteboard" className="text-lg transition-colors hover:text-[var(--sketch-accent)]">
+                        Whiteboard
                     </a>
                     <a href="/board/brainstorm" className="text-lg transition-colors hover:text-[var(--sketch-accent)]">
                         Brainstorm
+                    </a>
+                    <a href="/random" className="text-lg transition-colors hover:text-[var(--sketch-accent)]">
+                        Random
                     </a>
                     <a href="/battleship" className="text-lg transition-colors hover:text-[var(--sketch-accent)]">
                         Battleship

@@ -31,7 +31,6 @@ const BrainstormSpace: FC = () => {
 
     return (
         <div className="flex h-full w-full flex-col">
-            {/* Header */}
             <div className="sketch-card p-4 mb-4">
                 <div className="flex items-center justify-between">
                     <div>
@@ -57,10 +56,7 @@ const BrainstormSpace: FC = () => {
                     </div>
                 </div>
             </div>
-
-            {/* Board with attendance sidebar */}
             <div className="flex gap-4 flex-1">
-                {/* Board */}
                 <div
                     ref={boardRef}
                     className="border-[var(--sketch-border)] relative min-h-[300px] sm:min-h-[400px] md:min-h-[500px] flex-1 overflow-hidden rounded-xl border-2 border-dashed"

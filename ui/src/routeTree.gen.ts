@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as RandomRouteImport } from './routes/random'
 import { Route as BoardRouteImport } from './routes/board'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as BoardNoteRouteImport } from './routes/board/note'
+import { Route as BoardWhiteboardRouteImport } from './routes/board/whiteboard'
 import { Route as BoardBrainstormRouteImport } from './routes/board/brainstorm'
 
+const RandomRoute = RandomRouteImport.update({
+  id: '/random',
+  path: '/random',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BoardRoute = BoardRouteImport.update({
   id: '/board',
   path: '/board',
@@ -24,9 +30,9 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BoardNoteRoute = BoardNoteRouteImport.update({
-  id: '/note',
-  path: '/note',
+const BoardWhiteboardRoute = BoardWhiteboardRouteImport.update({
+  id: '/whiteboard',
+  path: '/whiteboard',
   getParentRoute: () => BoardRoute,
 } as any)
 const BoardBrainstormRoute = BoardBrainstormRouteImport.update({
@@ -38,37 +44,59 @@ const BoardBrainstormRoute = BoardBrainstormRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/board': typeof BoardRouteWithChildren
+  '/random': typeof RandomRoute
   '/board/brainstorm': typeof BoardBrainstormRoute
-  '/board/note': typeof BoardNoteRoute
+  '/board/whiteboard': typeof BoardWhiteboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/board': typeof BoardRouteWithChildren
+  '/random': typeof RandomRoute
   '/board/brainstorm': typeof BoardBrainstormRoute
-  '/board/note': typeof BoardNoteRoute
+  '/board/whiteboard': typeof BoardWhiteboardRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/board': typeof BoardRouteWithChildren
+  '/random': typeof RandomRoute
   '/board/brainstorm': typeof BoardBrainstormRoute
-  '/board/note': typeof BoardNoteRoute
+  '/board/whiteboard': typeof BoardWhiteboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/board' | '/board/brainstorm' | '/board/note'
+  fullPaths:
+    | '/'
+    | '/board'
+    | '/random'
+    | '/board/brainstorm'
+    | '/board/whiteboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/board' | '/board/brainstorm' | '/board/note'
-  id: '__root__' | '/' | '/board' | '/board/brainstorm' | '/board/note'
+  to: '/' | '/board' | '/random' | '/board/brainstorm' | '/board/whiteboard'
+  id:
+    | '__root__'
+    | '/'
+    | '/board'
+    | '/random'
+    | '/board/brainstorm'
+    | '/board/whiteboard'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BoardRoute: typeof BoardRouteWithChildren
+  RandomRoute: typeof RandomRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/random': {
+      id: '/random'
+      path: '/random'
+      fullPath: '/random'
+      preLoaderRoute: typeof RandomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/board': {
       id: '/board'
       path: '/board'
@@ -83,11 +111,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/board/note': {
-      id: '/board/note'
-      path: '/note'
-      fullPath: '/board/note'
-      preLoaderRoute: typeof BoardNoteRouteImport
+    '/board/whiteboard': {
+      id: '/board/whiteboard'
+      path: '/whiteboard'
+      fullPath: '/board/whiteboard'
+      preLoaderRoute: typeof BoardWhiteboardRouteImport
       parentRoute: typeof BoardRoute
     }
     '/board/brainstorm': {
@@ -102,12 +130,12 @@ declare module '@tanstack/react-router' {
 
 interface BoardRouteChildren {
   BoardBrainstormRoute: typeof BoardBrainstormRoute
-  BoardNoteRoute: typeof BoardNoteRoute
+  BoardWhiteboardRoute: typeof BoardWhiteboardRoute
 }
 
 const BoardRouteChildren: BoardRouteChildren = {
   BoardBrainstormRoute: BoardBrainstormRoute,
-  BoardNoteRoute: BoardNoteRoute,
+  BoardWhiteboardRoute: BoardWhiteboardRoute,
 }
 
 const BoardRouteWithChildren = BoardRoute._addFileChildren(BoardRouteChildren)
@@ -115,6 +143,7 @@ const BoardRouteWithChildren = BoardRoute._addFileChildren(BoardRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BoardRoute: BoardRouteWithChildren,
+  RandomRoute: RandomRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

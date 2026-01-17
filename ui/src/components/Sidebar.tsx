@@ -1,5 +1,5 @@
 import { FC, ReactNode } from 'react';
-import { XMarkIcon, PencilSquareIcon, LightBulbIcon, RocketLaunchIcon, Cog6ToothIcon, QuestionMarkCircleIcon, SparklesIcon } from '@heroicons/react/24/outline';
+import { XMarkIcon, PencilSquareIcon, LightBulbIcon, RocketLaunchIcon, Cog6ToothIcon, QuestionMarkCircleIcon, TicketIcon, SparklesIcon } from '@heroicons/react/24/outline';
 
 interface SidebarProps {
     open: boolean;
@@ -23,7 +23,7 @@ const Sidebar: FC<SidebarProps> = ({ open, onClose }) => {
     const navItems: NavItem[] = [
         {
             icon: <PencilSquareIcon className="h-6 w-6" />,
-            label: 'Note',
+            label: 'Whiteboard',
             href: '/board/note',
             description: 'Scribble your thoughts',
         },
@@ -32,6 +32,12 @@ const Sidebar: FC<SidebarProps> = ({ open, onClose }) => {
             label: 'Brainstorm',
             href: '/board/brainstorm',
             description: 'Collaborate & create',
+        },
+        {
+            icon: <TicketIcon className="h-6 w-6" />,
+            label: 'Random Wheel',
+            href: '/random',
+            description: 'CSGO case opening style',
         },
         {
             icon: <RocketLaunchIcon className="h-6 w-6" />,
