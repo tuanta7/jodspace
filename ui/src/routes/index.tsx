@@ -1,5 +1,6 @@
 
 import { createFileRoute } from '@tanstack/react-router';
+import { Helmet } from 'react-helmet-async';
 import { SparklesIcon } from '@heroicons/react/24/solid';
 import { LightBulbIcon, PencilSquareIcon, RocketLaunchIcon, TicketIcon } from '@heroicons/react/24/outline';
 import SpaceList from '../features/SpaceList.tsx';
@@ -10,7 +11,30 @@ export const Route = createFileRoute('/')({
 
 function Homepage() {
     return (
-        <div className="mx-auto max-w-6xl space-y-6">
+        <>
+            <Helmet>
+                <title>JODSPACE - Collaborative Whiteboard & Brainstorming Tools</title>
+                <meta name="description" content="JODSPACE is a creative workspace for sketching ideas, collaborative brainstorming, random name picking, and fun games. Start organizing your thoughts today!" />
+                <meta name="keywords" content="whiteboard, brainstorm, collaboration, random picker, sticky notes, productivity, team tools" />
+
+                {/* Open Graph / Facebook */}
+                <meta property="og:type" content="website" />
+                <meta property="og:title" content="JODSPACE - Collaborative Whiteboard & Brainstorming Tools" />
+                <meta property="og:description" content="A creative workspace for sketching ideas, collaborative brainstorming, and team activities." />
+                <meta property="og:site_name" content="JODSPACE" />
+
+                {/* Twitter */}
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="JODSPACE - Collaborative Whiteboard & Brainstorming Tools" />
+                <meta name="twitter:description" content="A creative workspace for sketching ideas, collaborative brainstorming, and team activities." />
+
+                {/* Additional SEO */}
+                <meta name="robots" content="index, follow" />
+                <meta name="author" content="JODSPACE Team" />
+                <link rel="canonical" href="https://jodspace.com" />
+            </Helmet>
+
+            <div className="mx-auto max-w-6xl space-y-6">
             <div className="sketch-card sketch-tilt-1 p-6">
                 <h1 className="sketch-header flex items-center gap-2 text-2xl font-bold">
                     <SparklesIcon className="h-6 w-6 text-yellow-500" />
@@ -58,5 +82,6 @@ function Homepage() {
             </div>
             <SpaceList />
         </div>
+        </>
     );
 }

@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useRef, useState, useEffect, useCallback } from 'react';
+import { Helmet } from 'react-helmet-async';
 import {
     PencilIcon,
     TrashIcon,
@@ -466,7 +467,16 @@ function WhiteboardPage() {
     };
 
     return (
-        <div className="flex h-full flex-col gap-3 px-2 sm:px-4">
+        <>
+            <Helmet>
+                <title>Infinite Canvas Whiteboard | JODSPACE</title>
+                <meta name="description" content="Free online infinite canvas whiteboard with zoom, pan, and drawing tools. Perfect for sketching ideas, diagrams, and creative work." />
+                <meta name="keywords" content="whiteboard, infinite canvas, drawing, sketch, diagram, zoom, pan, creative tools" />
+                <meta property="og:title" content="Infinite Canvas Whiteboard | JODSPACE" />
+                <meta property="og:description" content="Free online infinite canvas whiteboard with zoom, pan, and drawing tools." />
+            </Helmet>
+
+            <div className="flex h-full flex-col gap-3 px-2 sm:px-4">
             {/* Toolbar */}
             <div className="sketch-card flex flex-wrap items-center justify-between gap-3 rounded-xl p-3">
                 {/* Tools */}
@@ -670,5 +680,6 @@ function WhiteboardPage() {
                 </span>
             </div>
         </div>
+        </>
     );
 }

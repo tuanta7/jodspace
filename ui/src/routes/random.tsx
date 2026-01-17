@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { useState, useRef, useCallback, Fragment } from 'react';
+import { Fragment, useState, useRef, useCallback } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { PlusIcon, TrashIcon, PlayIcon, ArrowPathIcon, XMarkIcon, ArrowUpTrayIcon } from '@heroicons/react/24/outline';
 import * as XLSX from 'xlsx';
 import * as React from 'react';
@@ -154,6 +155,14 @@ function RandomWheel() {
 
     return (
         <Fragment>
+            <Helmet>
+                <title>Random Name Picker - CSGO Style Wheel | JODSPACE</title>
+                <meta name="description" content="Fun CSGO case opening style random name picker. Perfect for choosing winners, making decisions, or picking team members. Import from Excel supported!" />
+                <meta name="keywords" content="random picker, name wheel, CSGO style, random selector, team picker, winner picker" />
+                <meta property="og:title" content="Random Name Picker - CSGO Style Wheel | JODSPACE" />
+                <meta property="og:description" content="Fun CSGO case opening style random name picker. Perfect for choosing winners!" />
+            </Helmet>
+
             {showModal && winner && (
                 <div
                     className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden bg-black/60 backdrop-blur-sm"
